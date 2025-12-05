@@ -18,6 +18,8 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddHttpClient();
 builder.Services.AddScoped<ITransportCompanyRepository, TransportCompanyRepository>();
 builder.Services.AddScoped<ITransportCompanyService, TransportCompanyService>();
+builder.Services.AddScoped<IStatusRepository, StatusRepository>();
+builder.Services.AddScoped<IStatusService, StatusService>();
 
 
 builder.Services.AddControllers()

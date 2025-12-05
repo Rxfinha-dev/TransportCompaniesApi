@@ -8,11 +8,11 @@ namespace TransportCompanies.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class TransportadoraController : Controller
+    public class TransportCompanyController : Controller
     {
         private readonly ITransportCompanyService _transportCompanyService;
         private readonly IMapper _mapper;
-        public TransportadoraController(ITransportCompanyService transportCompanyService, IMapper mapper)
+        public TransportCompanyController(ITransportCompanyService transportCompanyService, IMapper mapper)
         {
             _transportCompanyService = transportCompanyService;
             _mapper = mapper;
