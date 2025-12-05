@@ -8,8 +8,8 @@ namespace TransportCompanies.Interfaces.IServices
         ICollection<Order> GetOrders();
         Order GetOrder(int id);
 
-        Task<bool> IsOriginCepValid(Order order);
-        Task<bool> IsDestinationCepValid(Order order);
+        Task<bool> IsOriginCepValid(string cpf);
+       Task<bool> IsDestinationCepValid(string cpf);
 
 
         bool CreateOrder(Order order);

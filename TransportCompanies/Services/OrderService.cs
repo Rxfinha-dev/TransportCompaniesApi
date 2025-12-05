@@ -1,4 +1,5 @@
 ﻿using System.Runtime.ConstrainedExecution;
+using System.Threading.Tasks;
 using TransportCompanies.DTO;
 using TransportCompanies.Interfaces.IRepository;
 using TransportCompanies.Interfaces.IServices;
@@ -7,12 +8,14 @@ using TransportCompanies.Models;
 public class OrderService : IOrderService
 {
     private readonly IOrderRepository _orderRepository;
+    private readonly ICostumerRepository _costumerRepository;
     private readonly HttpClient _client;
 
-    public OrderService(IOrderRepository orderRepository, IHttpClientFactory clientFactory)
+    public OrderService(IOrderRepository orderRepository, IHttpClientFactory clientFactory, ICostumerRepository costumerRepository)
     {
         _orderRepository = orderRepository;
         _client = clientFactory.CreateClient("ViaCep");
+        _costumerRepository = costumerRepository;
     }
 
     public bool UpdateStatus(int id, Order orderToUpdate)
@@ -60,9 +63,14 @@ public class OrderService : IOrderService
 
     public bool CreateOrder(Order order)
     {
-        return false;
+        if (_costumerRepository.CostumerExists(order.Costumer.Id)) 
+            return false;
+
+        return _orderRepository.CreateOrder(order);        
+            
     }
 
+  
     public bool UpdateClientOrder(int id, Order orderToUpdate)
     {
         var order = _orderRepository.GetOrder(id);
@@ -108,9 +116,9 @@ public class OrderService : IOrderService
 
    
 
-    public async Task<bool> IsOriginCepValid(Order order)
+    public async Task<bool> IsOriginCepValid(string cep)
     {
-        var response = await _client.GetAsync($"https://viacep.com.br/ws/{order.Origin.Cep}/json/");
+        var response = await _client.GetAsync($"https://viacep.com.br/ws/{cep}/json/");
         if (!response.IsSuccessStatusCode)
             return false;
 
@@ -119,8 +127,14 @@ public class OrderService : IOrderService
         return json.Contains("\"erro\"") ? false : true;
     }
 
-    public Task<bool> IsDestinationCepValid(Order order)
+    public async Task<bool> IsDestinationCepValid(string cep)
     {
-        throw new NotImplementedException();
+        var response = await _client.GetAsync($"https://viacep.com.br/ws/{cep}/json/");
+        if (!response.IsSuccessStatusCode)
+            return false;
+
+        var json = await response.Content.ReadAsStringAsync();
+
+        return json.Contains("\"erro\"") ? false : true;
     }
 }
