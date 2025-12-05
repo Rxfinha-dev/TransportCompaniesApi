@@ -1,11 +1,11 @@
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json.Serialization;
-using TransportadorasApi.Data;
-using TransportadorasApi.Interfaces.IRepository;
-using TransportadorasApi.Interfaces.IService;
-using TransportadorasApi.Repository;
-using TransportadorasApi.Service;
-using TransportadorasApi.Services;
+using TransportCompanies.Data;
+using TransportCompanies.Interfaces.IRepository;
+using TransportCompanies.Interfaces.IServices;
+using TransportCompanies.Repository;
+using TransportCompanies.Services;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,6 +15,9 @@ builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddHttpClient();
+builder.Services.AddScoped<ITransportCompanyRepository, TransportCompanyRepository>();
+builder.Services.AddScoped<ITransportCompanyService, TransportCompanyService>();
 
 
 builder.Services.AddControllers()
@@ -24,12 +27,12 @@ builder.Services.AddControllers()
     });
 
 
-//builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
-//builder.Services.AddDbContext<DataContext>(options =>
-//{
-//    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
-//});
+builder.Services.AddDbContext<DataContext>(options =>
+{
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+});
 
 builder.Services.AddSwaggerGen();
 

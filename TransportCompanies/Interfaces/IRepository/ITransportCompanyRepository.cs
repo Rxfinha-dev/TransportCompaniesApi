@@ -16,5 +16,5 @@ namespace TransportCompanies.Interfaces.IRepository
         bool TransportCompanyExists(int id);
 
         bool Save();
-
+    }
 }

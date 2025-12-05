@@ -10,7 +10,7 @@ namespace TransportCompanies.Interfaces.IServices
 
         bool CreateTransportCompany(TransportCompany company);
 
-        bool UpdateTransportCompany(TransportCompany company);
+        bool UpdateTransportCompany(int id, TransportCompany company);
 
         bool DeleteTransportCompany(TransportCompany company);
 
