@@ -15,11 +15,18 @@ builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddHttpClient();
+builder.Services.AddHttpClient("ViaCep", c =>
+{
+    c.BaseAddress = new Uri("https://viacep.com.br/ws/");
+});
 builder.Services.AddScoped<ITransportCompanyRepository, TransportCompanyRepository>();
 builder.Services.AddScoped<ITransportCompanyService, TransportCompanyService>();
 builder.Services.AddScoped<IStatusRepository, StatusRepository>();
 builder.Services.AddScoped<IStatusService, StatusService>();
+builder.Services.AddScoped<ICostumerRepository, CostumerRepository>();
+builder.Services.AddScoped<ICostumerService, CostumerService>();
+builder.Services.AddScoped<IOrderService, OrderService>();
+builder.Services.AddScoped<IOrderRepository, OrderRepositorycs>();
 
 
 builder.Services.AddControllers()

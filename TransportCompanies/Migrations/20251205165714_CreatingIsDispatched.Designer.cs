@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TransportCompanies.Data;
 
@@ -10,9 +11,11 @@ using TransportCompanies.Data;
 namespace TransportCompanies.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20251205165714_CreatingIsDispatched")]
+    partial class CreatingIsDispatched
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -50,9 +53,6 @@ namespace TransportCompanies.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("CostumerId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Destination")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -72,8 +72,6 @@ namespace TransportCompanies.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CostumerId");
 
                     b.HasIndex("StatusId");
 
@@ -121,12 +119,6 @@ namespace TransportCompanies.Migrations
 
             modelBuilder.Entity("TransportCompanies.Models.Order", b =>
                 {
-                    b.HasOne("TransportCompanies.Models.Costumer", "Costumer")
-                        .WithMany()
-                        .HasForeignKey("CostumerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("TransportCompanies.Models.Status", "Status")
                         .WithMany()
                         .HasForeignKey("StatusId")
@@ -138,8 +130,6 @@ namespace TransportCompanies.Migrations
                         .HasForeignKey("TransportCompanyId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Costumer");
 
                     b.Navigation("Status");
 
