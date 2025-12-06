@@ -1,7 +1,9 @@
 ﻿using System.Numerics;
+using Microsoft.EntityFrameworkCore;
 
 namespace TransportCompanies.DTO
 {
+    
     public class ItemDto
     {
      

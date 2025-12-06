@@ -19,29 +19,9 @@ namespace TransportCompanies.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Order>()
-             .Property(o => o.orderedItens)
-             .HasConversion
-             (
-                    v => JsonSerializer.Serialize(v, (JsonSerializerOptions)null),
-                    v => JsonSerializer.Deserialize<ICollection<ItemDto>>(v, (JsonSerializerOptions)null)
-             );
-
+                .OwnsOne(typeof(AddressDto), "OriginAddress");
             modelBuilder.Entity<Order>()
-                .Property(o => o.Origin)
-                .HasConversion
-                (
-                    v => JsonSerializer.Serialize(v, (JsonSerializerOptions)null),
-                    v => JsonSerializer.Deserialize<AddressDto>(v, (JsonSerializerOptions)null)
-                );
-
-            modelBuilder.Entity<Order>()
-                .Property(o => o.Destination)
-                .HasConversion
-                (
-                    v => JsonSerializer.Serialize(v, (JsonSerializerOptions)null),
-                    v => JsonSerializer.Deserialize<AddressDto>(v, (JsonSerializerOptions)null)
-                );
-;
+                .OwnsOne(typeof(AddressDto), "DestinationAddress"); 
 
         }
     }
