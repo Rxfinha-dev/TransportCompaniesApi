@@ -158,7 +158,7 @@ namespace TransportCompanies.Controllers
         [ProducesResponseType(204)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
-        public IActionResult UpdateAddress(int id, [FromBody] UpdateAdressDto addressToUpdate)
+        public async Task<IActionResult> UpdateAddressAsync(int id, [FromBody] UpdateAdressDto addressToUpdate)
         {
             if (addressToUpdate == null)
                 return BadRequest("Objeto inválido.");
@@ -169,7 +169,7 @@ namespace TransportCompanies.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            if (!_orderService.UpdateAddresses(id, addressToUpdate))
+            if (!await _orderService.UpdateAddresses(id, addressToUpdate))
             {
                 ModelState.AddModelError("", "Algo deu errado ao atualizar o endereço");
                 return StatusCode(500, ModelState);
