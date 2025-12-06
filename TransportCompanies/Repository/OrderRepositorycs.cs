@@ -29,18 +29,63 @@ namespace TransportCompanies.Repository
 
         public Order GetOrder(int id)
         {
-            return _context.Orders.Include(s=>s.Status)
-                .Include(c=>c.Costumer).
-                Include(t=>t.TransportCompany).
-                Where(o=>o.Id == id).FirstOrDefault();
+            return _context.Orders.Select(o => new Order
+            {
+
+                Id = o.Id,
+                orderedItens = o.orderedItens,
+                Origin = o.Origin,
+                Destination = o.Destination,
+
+                Status = new Status
+                {
+                    Description = o.Status.Description
+                },
+
+                Costumer = new Costumer
+                {
+                    Name = o.Costumer.Name,
+                    Cpf = o.Costumer.Cpf
+                },
+                TransportCompany = new TransportCompany
+                {
+                    Name = o.Costumer.Name
+                }
+
+
+            }).FirstOrDefault();
         }
 
         public ICollection<Order> GetOrders()
         {
-            return _context.Orders.OrderBy(o=>o.Id)
-                .Include(s => s.Status)
-                .Include(c => c.Costumer).
-                Include(t => t.TransportCompany).ToList();
+            return _context.Orders.Select(o => new Order
+            {
+
+                Id = o.Id,
+                orderedItens = o.orderedItens,
+                Origin = o.Origin,
+                Destination = o.Destination,
+
+                Status = new Status
+                {
+                    Description = o.Status.Description
+                },
+
+                Costumer = new Costumer
+                {
+                    Name = o.Costumer.Name,
+                    Cpf = o.Costumer.Cpf
+                },
+                TransportCompany = new TransportCompany
+                {
+                    Name = o.Costumer.Name
+                }
+
+
+            }).OrderBy(o => o.Id).ToList();
+               
+               
+               
         }
 
         public bool OrderExists(int id)
