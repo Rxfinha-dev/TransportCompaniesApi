@@ -4,17 +4,18 @@ namespace TransportCompanies.DTO
 {
     public class OrderDto
     {
-        public int Id { get; set; }
-
-        public Status Status { get; set; }
+        public int Id { get; set; }     
 
         public ICollection<ItemDto> orderedItens { get; set; }
-        public Costumer Costumer { get; set; }
+        public int StatusId { get; set; }
+        public int CostumerId { get; set; }
+        public int TransportCompanyId { get; set; }
 
-        public AddressDto Origin { get; set; }
+        public AddressDto origin { get; set; }
 
-        public AddressDto Destination { get; set; }
+        public AddressDto destination { get; set; }
 
-        public TransportCompany TransportCompany { get; set; }
+        public bool IsDispatched { get; set; }
+       
     }
 }

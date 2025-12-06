@@ -32,7 +32,7 @@ public class OrderService : IOrderService
 
     }
 
-    public bool UpdateAddresses(int id, AddressDto origin, AddressDto destination)
+    public bool UpdateAddresses(int id, UpdateAdressDto addressToUpdate)
     {
         var order = _orderRepository.GetOrder(id);
 
@@ -42,8 +42,8 @@ public class OrderService : IOrderService
       
         
 
-        order.Origin = origin;
-        order.Destination = destination;
+        order.Origin = addressToUpdate.Origin;
+        order.Destination = addressToUpdate.Destination;
 
         return _orderRepository.UpdateOrder(order);
     }
@@ -63,8 +63,7 @@ public class OrderService : IOrderService
 
     public bool CreateOrder(Order order)
     {
-        if (_costumerRepository.CostumerExists(order.Costumer.Id)) 
-            return false;
+     
 
         return _orderRepository.CreateOrder(order);        
             
@@ -92,7 +91,7 @@ public class OrderService : IOrderService
         if (order == null)
             return false;
 
-        if(order.Status.IsDispatched == true)
+        if(order.IsDispatched == true)
             return false;
 
         order.orderedItens = orderToUpdate.orderedItens;
@@ -116,7 +115,7 @@ public class OrderService : IOrderService
 
    
 
-    public async Task<bool> IsOriginCepValid(string cep)
+    public async Task<bool> IsCepValid(string cep)
     {
         var response = await _client.GetAsync($"https://viacep.com.br/ws/{cep}/json/");
         if (!response.IsSuccessStatusCode)
@@ -127,14 +126,5 @@ public class OrderService : IOrderService
         return json.Contains("\"erro\"") ? false : true;
     }
 
-    public async Task<bool> IsDestinationCepValid(string cep)
-    {
-        var response = await _client.GetAsync($"https://viacep.com.br/ws/{cep}/json/");
-        if (!response.IsSuccessStatusCode)
-            return false;
 
-        var json = await response.Content.ReadAsStringAsync();
-
-        return json.Contains("\"erro\"") ? false : true;
-    }
 }

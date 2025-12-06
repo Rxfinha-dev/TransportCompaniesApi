@@ -8,8 +8,8 @@ namespace TransportCompanies.Interfaces.IServices
         ICollection<Order> GetOrders();
         Order GetOrder(int id);
 
-        Task<bool> IsOriginCepValid(string cpf);
-       Task<bool> IsDestinationCepValid(string cpf);
+        Task<bool> IsCepValid(string cpf);
+     
 
 
         bool CreateOrder(Order order);
@@ -22,7 +22,7 @@ namespace TransportCompanies.Interfaces.IServices
 
         bool DeleteOrder(Order order);
         bool UpdateStatus(int id, Order order);
-        bool UpdateAddresses(int id, AddressDto origin, AddressDto destination);
+        bool UpdateAddresses(int id, UpdateAdressDto addressToUpdate);
 
     }
 }

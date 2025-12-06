@@ -16,9 +16,11 @@ namespace TransportCompanies.Models
 
         public AddressDto Origin { get; set; }
     
-        public AddressDto Destination { get; set; }
+        public AddressDto Destination { get; set; }       
 
         public TransportCompany TransportCompany { get; set; }
+
+        public bool IsDispatched { get; set; }
 
     }
 }
