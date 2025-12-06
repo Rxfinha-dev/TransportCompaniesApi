@@ -8,6 +8,7 @@ namespace TransportCompanies.DTO
 
         public ICollection<ItemDto> orderedItens { get; set; }
         public int StatusId { get; set; }
+      
         public int CostumerId { get; set; }
         public int TransportCompanyId { get; set; }
 

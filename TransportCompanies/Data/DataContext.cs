@@ -41,6 +41,7 @@ namespace TransportCompanies.Data
                     v => JsonSerializer.Serialize(v, (JsonSerializerOptions)null),
                     v => JsonSerializer.Deserialize<AddressDto>(v, (JsonSerializerOptions)null)
                 );
+;
 
         }
     }

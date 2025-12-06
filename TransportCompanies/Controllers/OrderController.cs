@@ -66,7 +66,7 @@ namespace TransportCompanies.Controllers
 
             var orderMap = _mapper.Map<Order>(orderCreate);
 
-            if(!_orderService.CreateOrder(orderMap))
+            if(!await _orderService.CreateOrder(orderMap))
             {
                 ModelState.AddModelError("", "Algo deu errado ao criar o Pedido");
                 return StatusCode(500, ModelState);

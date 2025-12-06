@@ -12,7 +12,7 @@ namespace TransportCompanies.Interfaces.IServices
      
 
 
-        bool CreateOrder(Order order);
+        Task<bool> CreateOrder(Order order);
 
         bool UpdateClientOrder(int id, Order order);
         bool UpdateOrderItens(int id, Order order);
@@ -22,7 +22,7 @@ namespace TransportCompanies.Interfaces.IServices
 
         bool DeleteOrder(Order order);
         bool UpdateStatus(int id, Order order);
-        bool UpdateAddresses(int id, UpdateAdressDto addressToUpdate);
+        Task<bool> UpdateAddresses(int id, UpdateAdressDto addressToUpdate);
 
     }
 }

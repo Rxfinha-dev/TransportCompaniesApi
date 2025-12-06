@@ -23,29 +23,44 @@ public class OrderService : IOrderService
 
         var order = _orderRepository.GetOrder(id);
 
-        if (order == null)
-            return false;
+        if (order is null)
+            throw new Exception("Pedido não encontrado");
 
-        order.Status = orderToUpdate.Status;
+        if (!order.IsDispatched)
+            order.IsDispatched = orderToUpdate.IsDispatched;
 
-        return _orderRepository.UpdateOrder(order);
+        order.statusID = orderToUpdate.statusID;
+
+
+
+        return _orderRepository.Save();
 
     }
 
-    public bool UpdateAddresses(int id, UpdateAdressDto addressToUpdate)
+    public async Task<bool> UpdateAddresses(int id, UpdateAdressDto addressToUpdate)
     {
+       
+
         var order = _orderRepository.GetOrder(id);
+
+        if (order.IsDispatched)
+            throw new Exception("O pedido já foi despachado");
 
         if (order == null)
             return false;
 
-      
-        
+        if (!await IsCepValid(addressToUpdate.Origin.Cep))
+            throw new Exception("Cep de origem inválido");
+
+        if (!await IsCepValid(addressToUpdate.Origin.Cep))
+            throw new Exception("Cep de destino inválido");
+
+
 
         order.Origin = addressToUpdate.Origin;
         order.Destination = addressToUpdate.Destination;
 
-        return _orderRepository.UpdateOrder(order);
+        return _orderRepository.Save();
     }
 
     public ICollection<Order> GetOrders()
@@ -61,11 +76,15 @@ public class OrderService : IOrderService
         return _orderRepository.GetOrder(id);            
     }
 
-    public bool CreateOrder(Order order)
+    public async Task<bool> CreateOrder(Order order)
     {
-     
 
-        return _orderRepository.CreateOrder(order);        
+        if (!await IsCepValid(order.Origin.Cep))
+            throw new Exception("Cep de origem inválido");
+        if(!await IsCepValid(order.Destination.Cep))
+        throw new Exception("Cep de destino inválido");
+
+        return _orderRepository.CreateOrder(order);
             
     }
 
@@ -74,10 +93,16 @@ public class OrderService : IOrderService
     {
         var order = _orderRepository.GetOrder(id);
 
-        if (order == null)
+        if (order is null)
             return false;
 
-        order.Costumer = orderToUpdate.Costumer;
+        if (!_costumerRepository.CostumerExists(orderToUpdate.costumerId))
+            throw new Exception("O cliente não existe");
+
+
+        order.costumerId = orderToUpdate.costumerId;
+       
+
 
         return _orderRepository.UpdateOrder(order);
     }
@@ -88,11 +113,15 @@ public class OrderService : IOrderService
        
         var order = _orderRepository.GetOrder(id);
 
-        if (order == null)
-            return false;
+        if (orderToUpdate.orderedItens is null)
+            throw new Exception("items is null");
 
-        if(order.IsDispatched == true)
-            return false;
+        if (order is null)
+            throw new Exception("order is null on load");
+
+        if (order.IsDispatched is true)
+            throw new Exception("Pedido já foi despachado");
+
 
         order.orderedItens = orderToUpdate.orderedItens;
 

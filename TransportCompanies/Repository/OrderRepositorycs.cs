@@ -1,4 +1,5 @@
-﻿using TransportCompanies.Data;
+﻿using Microsoft.EntityFrameworkCore;
+using TransportCompanies.Data;
 using TransportCompanies.Interfaces.IRepository;
 using TransportCompanies.Models;
 
@@ -28,12 +29,18 @@ namespace TransportCompanies.Repository
 
         public Order GetOrder(int id)
         {
-            return _context.Orders.Where(o=>o.Id == id).FirstOrDefault();
+            return _context.Orders.Include(s=>s.Status)
+                .Include(c=>c.Costumer).
+                Include(t=>t.TransportCompany).
+                Where(o=>o.Id == id).FirstOrDefault();
         }
 
         public ICollection<Order> GetOrders()
         {
-            return _context.Orders.OrderBy(o=>o.Id).ToList();
+            return _context.Orders.OrderBy(o=>o.Id)
+                .Include(s => s.Status)
+                .Include(c => c.Costumer).
+                Include(t => t.TransportCompany).ToList();
         }
 
         public bool OrderExists(int id)
