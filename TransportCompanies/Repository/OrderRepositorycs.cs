@@ -39,16 +39,19 @@ namespace TransportCompanies.Repository
 
                 Status = new Status
                 {
+                    Id = o.Status.Id,
                     Description = o.Status.Description
                 },
 
                 Costumer = new Costumer
                 {
+                    Id = o.Costumer.Id,
                     Name = o.Costumer.Name,
                     Cpf = o.Costumer.Cpf
                 },
                 TransportCompany = new TransportCompany
                 {
+                    Id =  o.TransportCompany.Id,
                     Name = o.Costumer.Name
                 }
 
@@ -65,6 +68,10 @@ namespace TransportCompanies.Repository
                 orderedItens = o.orderedItens,
                 Origin = o.Origin,
                 Destination = o.Destination,
+                statusID = o.statusID,
+                costumerId = o.costumerId,
+                transportCompanyId = o.TransportCompany.Id,
+                
 
                 Status = new Status
                 {
