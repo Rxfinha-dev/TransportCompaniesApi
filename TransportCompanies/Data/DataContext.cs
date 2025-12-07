@@ -19,9 +19,12 @@ namespace TransportCompanies.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Order>()
-                .OwnsOne(typeof(AddressDto), "OriginAddress");
+                .OwnsOne(typeof(AddressDto), "Origin");
             modelBuilder.Entity<Order>()
-                .OwnsOne(typeof(AddressDto), "DestinationAddress"); 
+                .OwnsOne(typeof(AddressDto), "Destination");
+
+            modelBuilder.Entity<Order>()
+                .OwnsMany(typeof(ItemDto), "orderedItens");
 
         }
     }

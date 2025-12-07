@@ -53,7 +53,7 @@ namespace TransportCompanies.Repository
                 }
 
 
-            }).FirstOrDefault();
+            }).AsNoTracking().FirstOrDefault();
         }
 
         public ICollection<Order> GetOrders()
@@ -82,7 +82,7 @@ namespace TransportCompanies.Repository
                 }
 
 
-            }).OrderBy(o => o.Id).ToList();
+            }).OrderBy(o => o.Id).AsNoTracking().ToList();
                
                
                
