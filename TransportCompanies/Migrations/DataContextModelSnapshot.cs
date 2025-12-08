@@ -56,6 +56,10 @@ namespace TransportCompanies.Migrations
                     b.Property<int>("costumerId")
                         .HasColumnType("int");
 
+                    b.Property<string>("orderedItens")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("statusID")
                         .HasColumnType("int");
 
@@ -127,31 +131,6 @@ namespace TransportCompanies.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.OwnsMany("TransportCompanies.DTO.ItemDto", "orderedItens", b1 =>
-                        {
-                            b1.Property<int>("OrderId")
-                                .HasColumnType("int");
-
-                            b1.Property<int>("Id")
-                                .ValueGeneratedOnAdd()
-                                .HasColumnType("int");
-
-                            SqlServerPropertyBuilderExtensions.UseIdentityColumn(b1.Property<int>("Id"));
-
-                            b1.Property<decimal>("Amount")
-                                .HasColumnType("decimal(18,2)");
-
-                            b1.Property<int>("Quantity")
-                                .HasColumnType("int");
-
-                            b1.HasKey("OrderId", "Id");
-
-                            b1.ToTable("ItemDto");
-
-                            b1.WithOwner()
-                                .HasForeignKey("OrderId");
-                        });
-
                     b.OwnsOne("TransportCompanies.DTO.AddressDto", "Destination", b1 =>
                         {
                             b1.Property<int>("OrderId")
@@ -209,8 +188,6 @@ namespace TransportCompanies.Migrations
                     b.Navigation("Status");
 
                     b.Navigation("TransportCompany");
-
-                    b.Navigation("orderedItens");
                 });
 #pragma warning restore 612, 618
         }

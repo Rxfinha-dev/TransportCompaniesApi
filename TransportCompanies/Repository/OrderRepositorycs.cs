@@ -29,34 +29,13 @@ namespace TransportCompanies.Repository
 
         public Order GetOrder(int id)
         {
-            return _context.Orders.Select(o => new Order
-            {
+            return _context.Orders.
+                Include(o=>o.Costumer)
+                .Include(o=>o.Status)
+                .Include(o=>o.TransportCompany)
+                .Where(o=>o.Id == id).FirstOrDefault();
 
-                Id = o.Id,
-                orderedItens = o.orderedItens,
-                Origin = o.Origin,
-                Destination = o.Destination,
-
-                Status = new Status
-                {
-                    Id = o.Status.Id,
-                    Description = o.Status.Description
-                },
-
-                Costumer = new Costumer
-                {
-                    Id = o.Costumer.Id,
-                    Name = o.Costumer.Name,
-                    Cpf = o.Costumer.Cpf
-                },
-                TransportCompany = new TransportCompany
-                {
-                    Id =  o.TransportCompany.Id,
-                    Name = o.Costumer.Name
-                }
-
-
-            }).AsNoTracking().FirstOrDefault();
+          
         }
 
         public ICollection<Order> GetOrders()
@@ -71,7 +50,7 @@ namespace TransportCompanies.Repository
                 statusID = o.statusID,
                 costumerId = o.costumerId,
                 transportCompanyId = o.TransportCompany.Id,
-                
+                IsDispatched = o.IsDispatched,
 
                 Status = new Status
                 {

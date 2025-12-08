@@ -24,7 +24,12 @@ namespace TransportCompanies.Data
                 .OwnsOne(typeof(AddressDto), "Destination");
 
             modelBuilder.Entity<Order>()
-                .OwnsMany(typeof(ItemDto), "orderedItens");
+                .Property(o => o.orderedItens)
+                .HasConversion
+                (
+                    v => JsonSerializer.Serialize(v, (JsonSerializerOptions)null),
+                    v => JsonSerializer.Deserialize<ICollection<ItemDto>>(v, (JsonSerializerOptions)null)
+                );
 
         }
     }
