@@ -22,7 +22,7 @@ namespace TransportCompanies.Controllers
 
         [HttpGet]
         [ProducesResponseType(200, Type = typeof(IEnumerable<Order>))]
-        public IActionResult GetOrder()
+        public IActionResult GetOrders()
         {
             var orders = _mapper.Map<List<OrderDto>>(_orderService.GetOrders());
 
@@ -176,6 +176,29 @@ namespace TransportCompanies.Controllers
             }
 
             return NoContent();
+        }
+
+        [HttpDelete("{id}")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(400)]
+        public IActionResult DeleteOrder(int id)
+        {
+            if (!_orderService.OrderExists(id))
+                return NotFound();
+            
+            var orderToDelete = _orderService.DeleteOrder(id);
+
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            if (!_orderService.DeleteOrder(id))
+            {
+                ModelState.AddModelError("", "Algo deu errado ao deletar");
+            }
+
+            return NoContent();
+            
         }
 
 

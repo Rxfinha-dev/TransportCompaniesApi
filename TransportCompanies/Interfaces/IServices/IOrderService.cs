@@ -20,7 +20,7 @@ namespace TransportCompanies.Interfaces.IServices
 
         bool OrderExists(int id);
 
-        bool DeleteOrder(Order order);
+        bool DeleteOrder(int id);
         bool UpdateStatus(int id, Order order);
         Task<bool> UpdateAddresses(int id, UpdateAdressDto addressToUpdate);
 

@@ -82,7 +82,7 @@ namespace TransportCompanies.Controllers
         [ProducesResponseType(400)]
         [ProducesResponseType(204)]
         [ProducesResponseType(404)]
-        public IActionResult UpdateRota(int id, [FromBody] CostumerDto updatedCostumer)
+        public IActionResult UpdateCostumer(int id, [FromBody] CostumerDto updatedCostumer)
         {
             if (updatedCostumer == null)
                 return BadRequest(ModelState);
@@ -100,7 +100,7 @@ namespace TransportCompanies.Controllers
 
             if (!_costumerService.UpdateCostumer(costumerMap))
             {
-                ModelState.AddModelError("", "Algo deu errado ao atualizar a rota");
+                ModelState.AddModelError("", "Algo deu errado ao atualizar o cliente ");
                 return StatusCode(500, ModelState);
             }
 
@@ -112,7 +112,7 @@ namespace TransportCompanies.Controllers
         [ProducesResponseType(400)]
         [ProducesResponseType(204)]
         [ProducesResponseType(404)]
-        public IActionResult DeleteRota(int id)
+        public IActionResult DeleteCostumer(int id)
         {
             if (!_costumerService.CostumerExists(id))
                 return NotFound();

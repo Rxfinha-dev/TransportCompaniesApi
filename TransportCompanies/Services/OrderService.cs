@@ -1,5 +1,6 @@
 ﻿using System.Runtime.ConstrainedExecution;
 using System.Threading.Tasks;
+using TransportCompanies.Data;
 using TransportCompanies.DTO;
 using TransportCompanies.Interfaces.IRepository;
 using TransportCompanies.Interfaces.IServices;
@@ -10,12 +11,14 @@ public class OrderService : IOrderService
     private readonly IOrderRepository _orderRepository;
     private readonly ICostumerRepository _costumerRepository;
     private readonly HttpClient _client;
+    private readonly DataContext _context;
 
-    public OrderService(IOrderRepository orderRepository, IHttpClientFactory clientFactory, ICostumerRepository costumerRepository)
+    public OrderService(IOrderRepository orderRepository, IHttpClientFactory clientFactory, ICostumerRepository costumerRepository, DataContext context)
     {
         _orderRepository = orderRepository;
         _client = clientFactory.CreateClient("ViaCep");
         _costumerRepository = costumerRepository;
+        _context = context;
     }
 
     public bool UpdateStatus(int id, Order orderToUpdate)
@@ -82,7 +85,7 @@ public class OrderService : IOrderService
         if (!await IsCepValid(order.Origin.Cep))
             throw new Exception("Cep de origem inválido");
         if(!await IsCepValid(order.Destination.Cep))
-        throw new Exception("Cep de destino inválido");
+            throw new Exception("Cep de destino inválido");
 
         return _orderRepository.CreateOrder(order);
             
@@ -134,12 +137,14 @@ public class OrderService : IOrderService
         return _orderRepository.OrderExists(id);
     }
 
-    public bool DeleteOrder(Order order)
+    public bool DeleteOrder(int id)
     {
-        if (!_orderRepository.OrderExists(order.Id))
+        if (!_orderRepository.OrderExists(id))
             return false;
+        
+        var orderToDelete = _context.Orders.Where(o=>o.Id == id).FirstOrDefault();
 
-        return _orderRepository.DeleteOrder(order);
+        return _orderRepository.DeleteOrder(orderToDelete);
     }
 
    

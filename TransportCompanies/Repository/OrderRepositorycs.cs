@@ -30,37 +30,34 @@ namespace TransportCompanies.Repository
         public Order GetOrder(int id, bool tracking = false)
         {
             var order = _context.Orders.Where(o => o.Id == id).Select(o => new Order
-            {
+            { 
                 costumerId = o.Costumer.Id,
-               Costumer = new Costumer
-               {
-                   Name =  o.Costumer.Name,
-                   Cpf = o.Costumer.Cpf
-               },
+                   Costumer = new Costumer
+                   {
+                       Name =  o.Costumer.Name,
+                       Cpf = o.Costumer.Cpf
+                   },
                 statusID = o.Status.Id,
-               Status = new Status
-               {
-                   Description =  o.Status.Description
-               },
+                   Status = new Status
+                   {
+                       Description =  o.Status.Description
+                   },
                
                transportCompanyId = o.TransportCompany.Id,
-               TransportCompany = new TransportCompany
-               {
-                   Name = o.TransportCompany.Name,
-               }
+                   TransportCompany = new TransportCompany
+                   {
+                       Name = o.TransportCompany.Name,
+                   }
                
             });
-
-
+            
             if (!tracking)
             {
                 order = order.AsNoTracking();
             }
-                
             
             return order.FirstOrDefault();
-
-          
+            
         }
 
         public ICollection<Order> GetOrders()
