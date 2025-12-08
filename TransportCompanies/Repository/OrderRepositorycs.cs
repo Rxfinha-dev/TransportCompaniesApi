@@ -27,13 +27,21 @@ namespace TransportCompanies.Repository
             return Save();
         }
 
-        public Order GetOrder(int id)
+        public Order GetOrder(int id, bool tracking = false)
         {
-            return _context.Orders.
-                Include(o=>o.Costumer)
-                .Include(o=>o.Status)
-                .Include(o=>o.TransportCompany)
-                .Where(o=>o.Id == id).FirstOrDefault();
+            var order = _context.Orders.Include(o => o.Costumer)
+                .Include(o => o.Status)
+                .Include(o => o.TransportCompany)
+                .Where(o => o.Id == id);
+
+
+            if (!tracking)
+            {
+                order = order.AsNoTracking();
+            }
+                
+            
+            return order.FirstOrDefault();
 
           
         }
