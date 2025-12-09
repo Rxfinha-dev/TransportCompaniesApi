@@ -98,6 +98,11 @@ public class OrderService : IOrderService
 
         if (order is null)
             return false;
+        
+        if (order.IsDispatched)
+            throw new Exception("O pedido já foi despachado");
+
+    
 
         if (!_costumerRepository.CostumerExists(orderToUpdate.costumerId))
             throw new Exception("O cliente não existe");

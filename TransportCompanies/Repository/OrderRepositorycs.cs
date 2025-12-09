@@ -29,34 +29,16 @@ namespace TransportCompanies.Repository
 
         public Order GetOrder(int id, bool tracking = false)
         {
-            var order = _context.Orders.Where(o => o.Id == id).Select(o => new Order
-            { 
-                costumerId = o.Costumer.Id,
-                   Costumer = new Costumer
-                   {
-                       Name =  o.Costumer.Name,
-                       Cpf = o.Costumer.Cpf
-                   },
-                statusID = o.Status.Id,
-                   Status = new Status
-                   {
-                       Description =  o.Status.Description
-                   },
-               
-               transportCompanyId = o.TransportCompany.Id,
-                   TransportCompany = new TransportCompany
-                   {
-                       Name = o.TransportCompany.Name,
-                   }
-               
-            });
+            var order = _context.Orders.Include(o => o.Costumer)
+                .Include(o => o.TransportCompany)
+                .Include(o => o.Status).AsQueryable();
             
-            if (!tracking)
+            if (!tracking)  
             {
                 order = order.AsNoTracking();
             }
             
-            return order.FirstOrDefault();
+            return order.FirstOrDefault(o=>o.Id == id);
             
         }
 
