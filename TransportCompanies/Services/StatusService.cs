@@ -13,46 +13,46 @@ namespace TransportCompanies.Services
             _statusRepository = statusRepository;
         }
 
-        public bool CreateStatus(Status status)
+        public async Task<bool> CreateStatus(Status status)
         {
-            if (_statusRepository.StatusExists(status.Id))
+            if (await _statusRepository.StatusExists(status.Id))
                 throw new Exception("Status já cadastrado");
 
-            return _statusRepository.CreateStatus(status);
+            return await _statusRepository.CreateStatus(status);
         }
 
-        public bool DeleteStatus(Status status)
+        public async Task<bool> DeleteStatus(Status status)
         {
-            if (!_statusRepository.StatusExists(status.Id))
+            if (! await _statusRepository.StatusExists(status.Id))
                 throw new Exception("Status não cadastrado");
 
-            return _statusRepository.DeleteStatus(status);
+            return await _statusRepository.DeleteStatus(status);
         }
 
-        public Status GetStatus(int id)
+        public async Task<Status> GetStatus(int id)
         {
-            if (!_statusRepository.StatusExists(id))
+            if (!await _statusRepository.StatusExists(id))
                 throw new Exception("Status não cadastrado");
 
-            return _statusRepository.GetStatus(id);
+            return await _statusRepository.GetStatus(id);
         }
 
-        public ICollection<Status> GetStatuses()
+        public async Task<ICollection<Status>> GetStatuses()
         {
-            return _statusRepository.GetStatuses();
+            return await _statusRepository.GetStatuses();
         }
 
-        public bool StatusExists(int id)
+        public async Task<bool> StatusExists(int id)
         {
-            return _statusRepository.StatusExists(id);
+            return await _statusRepository.StatusExists(id);
         }
 
-        public bool UpdateStatus(int id,Status status)
+        public async Task<bool> UpdateStatus(int id,Status status)
         {
-            if (!_statusRepository.StatusExists(status.Id))
+            if (!await _statusRepository.StatusExists(status.Id))
                 throw new Exception("Status não cadastrado");
 
-            return _statusRepository.UpdateStatus(status);
+            return await _statusRepository.UpdateStatus(status);
         }
     }
 }

@@ -4,13 +4,13 @@ namespace TransportCompanies.Interfaces.IRepository
 {
     public interface IStatusRepository
     {
-        ICollection<Status> GetStatuses();
-        Status GetStatus(int id);
-        bool CreateStatus(Status status);
-        bool UpdateStatus(Status status);
-        bool DeleteStatus(Status status);
-        bool StatusExists(int id);
+        Task<ICollection<Status>> GetStatuses();
+        Task<Status> GetStatus(int id);
+        Task<bool> CreateStatus(Status status);
+        Task<bool> UpdateStatus(Status status);
+        Task<bool> DeleteStatus(Status status);
+        Task<bool> StatusExists(int id);
 
-        bool Save();
+        Task<bool> Save();
     }
 }

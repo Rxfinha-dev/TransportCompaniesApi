@@ -20,9 +20,9 @@ namespace TransportCompanies.Controllers
 
         [HttpGet]
         [ProducesResponseType(200, Type = typeof(IEnumerable<Status>))]
-        public IActionResult GetStatuses()
+        public async Task<IActionResult> GetStatusesAsync()
         {
-            var statuses = _mapper.Map<List<StatusDto>>(_statusService.GetStatuses());
+            var statuses = _mapper.Map<List<StatusDto>>(await _statusService.GetStatuses());
 
             if (!ModelState.IsValid)
                 return BadRequest();
@@ -33,12 +33,12 @@ namespace TransportCompanies.Controllers
         [HttpGet("{id}")]
         [ProducesResponseType(200, Type = typeof(Status))]
         [ProducesResponseType(400)]
-        public IActionResult GetRota(int id)
+        public async Task<IActionResult> GetRotaAsync(int id)
         {
-            if (!_statusService.StatusExists(id))
+            if (!await _statusService.StatusExists(id))
                 return NotFound();
 
-            var rota = _mapper.Map<StatusDto>(_statusService.GetStatus(id));
+            var rota = _mapper.Map<StatusDto>(await _statusService.GetStatus(id));
 
             if (!ModelState.IsValid)
                 return BadRequest();
@@ -49,12 +49,12 @@ namespace TransportCompanies.Controllers
         [HttpPost]
         [ProducesResponseType(204)]
         [ProducesResponseType(400)]
-        public IActionResult CreateRota([FromBody] StatusDto statusCreate)
+        public async Task<IActionResult> CreateRotaAsync([FromBody] StatusDto statusCreate)
         {
             if (statusCreate == null)
                 return BadRequest(ModelState);
 
-            if (_statusService.StatusExists(statusCreate.Id))
+            if (await _statusService.StatusExists(statusCreate.Id))
             {
                 ModelState.AddModelError("", "Status já existe");
                 return StatusCode(422, ModelState);
@@ -66,7 +66,7 @@ namespace TransportCompanies.Controllers
 
             var statusMap = _mapper.Map<Status>(statusCreate);
 
-            if (!_statusService.CreateStatus(statusMap))
+            if (!await _statusService.CreateStatus(statusMap))
             {
                 ModelState.AddModelError("", "Alguma coisa deu errado ao salvar");
                 return StatusCode(500, ModelState);
@@ -80,7 +80,7 @@ namespace TransportCompanies.Controllers
         [ProducesResponseType(400)]
         [ProducesResponseType(204)]
         [ProducesResponseType(404)]
-        public IActionResult UpdateRota(int id, [FromBody] StatusDto updatedStatus)
+        public async Task<IActionResult> UpdateRotaAsync(int id, [FromBody] StatusDto updatedStatus)
         {
             if (updatedStatus == null)
                 return BadRequest(ModelState);
@@ -88,7 +88,7 @@ namespace TransportCompanies.Controllers
             if (id != updatedStatus.Id)
                 return BadRequest(ModelState);
 
-            if (!_statusService.StatusExists(id))
+            if (!await _statusService.StatusExists(id))
                 return NotFound();
 
             if (!ModelState.IsValid)
@@ -96,7 +96,7 @@ namespace TransportCompanies.Controllers
 
             var statusMap = _mapper.Map<Status>(updatedStatus);
 
-            if (!_statusService.UpdateStatus(id, statusMap))
+            if (!await _statusService.UpdateStatus(id, statusMap))
             {
                 ModelState.AddModelError("", "Algo deu errado ao atualizar o status");
                 return StatusCode(500, ModelState);
@@ -110,17 +110,17 @@ namespace TransportCompanies.Controllers
         [ProducesResponseType(400)]
         [ProducesResponseType(204)]
         [ProducesResponseType(404)]
-        public IActionResult DeleteRota(int id)
+        public async Task<IActionResult> DeleteRotaAsync(int id)
         {
-            if (!_statusService.StatusExists(id))
+            if (!await _statusService.StatusExists(id))
                 return NotFound();
 
-            var rotaToDelete = _statusService.GetStatus(id);
+            var rotaToDelete = await _statusService.GetStatus(id);
 
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            if (!_statusService.DeleteStatus(rotaToDelete))
+            if (!await _statusService.DeleteStatus(rotaToDelete))
             {
                 ModelState.AddModelError("", "Algo deu errado ao deletar");
             }

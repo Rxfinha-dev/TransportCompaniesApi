@@ -13,44 +13,44 @@ namespace TransportCompanies.Repository
             _context = context;
         }
 
-        public bool CreateStatus(Status status)
+        public async Task<bool> CreateStatus(Status status)
         {
             _context.Add(status);
-                return Save();
+                return await Save();
         }
 
 
-        public bool DeleteStatus(Status status)
+        public async Task<bool> DeleteStatus(Status status)
         {
             _context.Remove(status);
-            return Save();
+            return await Save();
         }
 
-        public Status GetStatus(int id)
+        public async Task<Status> GetStatus(int id)
         {
             return _context.Statuses.Where(s => s.Id == id).FirstOrDefault();
         }
 
-        public ICollection<Status> GetStatuses()
+        public async Task<ICollection<Status>> GetStatuses()
         {
             return _context.Statuses.OrderBy(s=>s.Id).AsNoTracking().ToList();
         }
 
-        public bool Save()
+        public async Task<bool> Save()
         {
             var saved = _context.SaveChanges();
             return saved > 0 ? true : false;
         }
 
-        public bool StatusExists(int id)
+        public async Task<bool> StatusExists(int id)
         {
             return _context.Statuses.Any(s => s.Id == id);
         }
 
-        public bool UpdateStatus(Status status)
+        public async Task<bool> UpdateStatus(Status status)
         {
             _context.Update(status);
-            return Save();
+            return await Save();
         }
     }
 }
