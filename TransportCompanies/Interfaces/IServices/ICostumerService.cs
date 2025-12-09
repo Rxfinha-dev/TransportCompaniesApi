@@ -1,4 +1,5 @@
-﻿using TransportCompanies.Models;
+﻿using TransportCompanies.DTO;
+using TransportCompanies.Models;
 
 namespace TransportCompanies.Interfaces.IServices
 {
@@ -9,7 +10,7 @@ namespace TransportCompanies.Interfaces.IServices
         Costumer GetCostumer(string cpf);
 
         bool CreateCostumer(Costumer costumer);
-        bool UpdateCostumer(Costumer costumer);
+        bool UpdateCostumer(int id, Costumer costumer);
         bool DeleteCostumer(Costumer costumer);
         bool CostumerExists(int id);
 

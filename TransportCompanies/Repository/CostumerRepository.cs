@@ -1,4 +1,5 @@
-﻿using TransportCompanies.Data;
+﻿using Microsoft.EntityFrameworkCore;
+using TransportCompanies.Data;
 using TransportCompanies.Interfaces.IRepository;
 using TransportCompanies.Models;
 
@@ -38,17 +39,17 @@ namespace TransportCompanies.Repository
 
         public Costumer GetCostumer(int id)
         {
-            return _context.Costumers.Where(c => c.Id == id).FirstOrDefault();
+            return _context.Costumers.Where(c => c.Id == id).AsNoTracking().FirstOrDefault();
         }
 
         public Costumer GetCostumer(string cpf)
         {
-            return _context.Costumers.Where(c => c.Cpf == cpf).FirstOrDefault();
+            return _context.Costumers.Where(c => c.Cpf == cpf).AsNoTracking().FirstOrDefault();
         }
 
         public ICollection<Costumer> GetCostumers()
         {
-           return _context.Costumers.OrderBy(c=>c.Id).ToList();
+           return _context.Costumers.OrderBy(c=>c.Id).AsNoTracking().ToList();
         }
 
         public bool Save()

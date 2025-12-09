@@ -1,4 +1,5 @@
 ﻿using DocumentValidator;
+using TransportCompanies.DTO;
 using TransportCompanies.Interfaces.IRepository;
 using TransportCompanies.Interfaces.IServices;
 using TransportCompanies.Models;
@@ -62,16 +63,15 @@ namespace TransportCompanies.Services
             return _costumerRepository.GetCostumers();
         }
 
-        public bool UpdateCostumer(Costumer costumer)
+        public bool UpdateCostumer(int id,Costumer costumer)
         {
+          
             if (!_costumerRepository.CostumerExists(costumer.Id))
-                throw new Exception("cliente não existe");
-
+                    throw new Exception("Cliente não cadastrada");
             bool cpfValidation = CpfValidation.Validate(costumer.Cpf);
-
-            if(!cpfValidation)
+            if (!cpfValidation)
                 throw new Exception("cpf inválido");
-
+            
             return _costumerRepository.UpdateCostumer(costumer);
 
         }

@@ -84,23 +84,20 @@ namespace TransportCompanies.Controllers
         [ProducesResponseType(404)]
         public IActionResult UpdateCostumer(int id, [FromBody] CostumerDto updatedCostumer)
         {
-            if (updatedCostumer == null)
+            if(updatedCostumer == null)
                 return BadRequest(ModelState);
-
-            if (id != updatedCostumer.Id)
-                return BadRequest(ModelState);
-
-            if (!_costumerService.CostumerExists(id))
+            if(id != updatedCostumer.Id)
+                return BadRequest("id não coincide");
+            if(!_costumerService.CostumerExists(id))
                 return NotFound();
-
             if (!ModelState.IsValid)
                 return BadRequest();
 
             var costumerMap = _mapper.Map<Costumer>(updatedCostumer);
 
-            if (!_costumerService.UpdateCostumer(costumerMap))
+            if (!_costumerService.UpdateCostumer(id, costumerMap))
             {
-                ModelState.AddModelError("", "Algo deu errado ao atualizar o cliente ");
+                ModelState.AddModelError("", "Algo deu errado ao Atualizar o cliente");
                 return StatusCode(500, ModelState);
             }
 

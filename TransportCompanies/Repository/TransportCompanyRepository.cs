@@ -27,12 +27,12 @@ namespace TransportCompanies.Repository
 
         public ICollection<TransportCompany> GetTransportCompanies()
         {
-            return _context.TransportCompanies.OrderBy(t=>t.Id).ToList();
+            return _context.TransportCompanies.OrderBy(t=>t.Id).AsNoTracking().ToList();
         }
 
         public TransportCompany GetTransportCompany(int id)
         {
-            return _context.TransportCompanies.Where(t => t.Id == id).FirstOrDefault();
+            return _context.TransportCompanies.Where(t => t.Id == id).AsNoTracking().FirstOrDefault();
         }
 
         public bool Save()

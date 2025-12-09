@@ -1,4 +1,5 @@
-﻿using TransportCompanies.Data;
+﻿using Microsoft.EntityFrameworkCore;
+using TransportCompanies.Data;
 using TransportCompanies.Interfaces.IRepository;
 using TransportCompanies.Models;
 
@@ -32,7 +33,7 @@ namespace TransportCompanies.Repository
 
         public ICollection<Status> GetStatuses()
         {
-            return _context.Statuses.OrderBy(s=>s.Id).ToList();
+            return _context.Statuses.OrderBy(s=>s.Id).AsNoTracking().ToList();
         }
 
         public bool Save()
