@@ -21,10 +21,10 @@ public class OrderService : IOrderService
         _context = context;
     }
 
-    public bool UpdateStatus(int id, Order orderToUpdate)
+    public async Task<bool> UpdateStatusAsync(int id, Order orderToUpdate)
     {
 
-        var order = _orderRepository.GetOrderToUpdate(id, true);
+        var order = await _orderRepository.GetOrderToUpdate(id, true);
 
         if (order is null)
             throw new Exception("Pedido não encontrado");
@@ -36,7 +36,7 @@ public class OrderService : IOrderService
 
 
 
-        return _orderRepository.Save();
+        return await _orderRepository.Save();
 
     }
 
@@ -44,7 +44,7 @@ public class OrderService : IOrderService
     {
        
 
-        var order = _orderRepository.GetOrderToUpdate(id, true);
+        var order = await _orderRepository.GetOrderToUpdate(id, true);
 
         if (order.IsDispatched)
             throw new Exception("O pedido já foi despachado");
@@ -55,20 +55,20 @@ public class OrderService : IOrderService
         order.Origin = await GetAddressByCep(addressToUpdate.Origin);
         order.Destination = await GetAddressByCep(addressToUpdate.Destination);
 
-        return _orderRepository.Save();
+        return await _orderRepository.Save();
     }
 
-    public ICollection<Order> GetOrders()
+    public async Task<ICollection<Order>> GetOrdersAsync()
     {
-        return _orderRepository.GetOrders();
+        return await _orderRepository.GetOrders();
     }
 
-    public Order GetOrder(int id)
+    public async Task<Order> GetOrderAsync(int id)
     {
-        if(!_orderRepository.OrderExists(id))
+        if(!await _orderRepository.OrderExists(id))
             return null;
 
-        return _orderRepository.GetOrderById(id);            
+        return await _orderRepository.GetOrderById(id);            
     }
 
     public async Task<bool> CreateOrder(Order order)
@@ -77,14 +77,14 @@ public class OrderService : IOrderService
        order.Origin = await GetAddressByCep(order.Origin);
        order.Destination = await GetAddressByCep(order.Destination);
 
-        return _orderRepository.CreateOrder(order);
+        return await _orderRepository.CreateOrder(order);
             
     }
 
   
     public async Task<bool> UpdateClientOrderAsync(int id, Order orderToUpdate)
     {
-        var order = _orderRepository.GetOrderToUpdate(id, true);
+        var order = await _orderRepository.GetOrderToUpdate(id, true);
 
         if (order is null)
             return false;
@@ -102,14 +102,14 @@ public class OrderService : IOrderService
        
 
 
-        return _orderRepository.UpdateOrder(order);
+        return await _orderRepository.UpdateOrder(order);
     }
 
-    public bool UpdateOrderItens(int id, Order orderToUpdate)
+    public async Task<bool> UpdateOrderItensAsync(int id, Order orderToUpdate)
     {
 
        
-        var order = _orderRepository.GetOrderToUpdate(id,true);
+        var order = await _orderRepository.GetOrderToUpdate(id,true);
 
         if (orderToUpdate.orderedItens is null)
             throw new Exception("items is null");
@@ -123,23 +123,23 @@ public class OrderService : IOrderService
 
         order.orderedItens = orderToUpdate.orderedItens;
 
-        return _orderRepository.UpdateOrder(order);
+        return await _orderRepository.UpdateOrder(order);
        
     }
 
-    public bool OrderExists(int id)
+    public async Task<bool> OrderExistsAsync(int id)
     {
-        return _orderRepository.OrderExists(id);
+        return await _orderRepository.OrderExists(id);
     }
 
-    public bool DeleteOrder(int id)
+    public async Task<bool> DeleteOrderAsync(int id)
     {
-        if (!_orderRepository.OrderExists(id))
+        if (!await _orderRepository.OrderExists(id))
             return false;
         
         var orderToDelete = _context.Orders.Where(o=>o.Id == id).FirstOrDefault();
 
-        return _orderRepository.DeleteOrder(orderToDelete);
+        return await _orderRepository.DeleteOrder(orderToDelete);
     }
 
    

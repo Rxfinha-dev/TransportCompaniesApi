@@ -15,20 +15,20 @@ namespace TransportCompanies.Repository
             _context = context; 
         }
 
-        public bool CreateOrder(Order order)
+        public async Task<bool> CreateOrder(Order order)
         {
             _context.Add(order);
-            return Save();
+            return await Save();
               
         }
 
-        public bool DeleteOrder(Order order)
+        public async Task<bool> DeleteOrder(Order order)
         {
             _context.Remove(order);
-            return Save();
+            return await Save();
         }
 
-        public Order GetOrderToUpdate(int id, bool tracking = false)
+        public async Task<Order> GetOrderToUpdate(int id, bool tracking = false)
         {
             var order = _context.Orders.Include(o => o.Costumer)
                 .Include(o => o.TransportCompany)
@@ -43,7 +43,7 @@ namespace TransportCompanies.Repository
             
         }
 
-        public ICollection<Order> GetOrders()
+        public async Task<ICollection<Order>> GetOrders()
         {
             return _context.Orders.Select(o => new Order
             {
@@ -77,25 +77,25 @@ namespace TransportCompanies.Repository
                
         }
 
-        public bool OrderExists(int id)
+        public async Task<bool> OrderExists(int id)
         {
             return _context.Orders.Any(o => o.Id == id);
         }
 
-        public bool Save()
+        public async Task<bool> Save()
         {
             var saved = _context.SaveChanges();
             return saved > 0 ? true : false;
         }
 
-        public bool UpdateOrder(Order order)
+        public async Task<bool> UpdateOrder(Order order)
         {
              _context.Update(order);
-            return Save();
+            return await Save();
 
         }
 
-        public Order GetOrderById(int id)
+        public async Task<Order> GetOrderById(int id)
         {
             return _context.Orders.Where(o => o.Id == id)
                  .Select(o => new Order

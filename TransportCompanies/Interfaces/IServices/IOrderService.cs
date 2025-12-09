@@ -5,8 +5,8 @@ namespace TransportCompanies.Interfaces.IServices
 {
     public interface IOrderService
     {
-        ICollection<Order> GetOrders();
-        Order GetOrder(int id);
+        Task<ICollection<Order>> GetOrdersAsync();
+        Task<Order> GetOrderAsync(int id);
 
         Task<bool> IsCepValid(string cpf);
      
@@ -15,13 +15,13 @@ namespace TransportCompanies.Interfaces.IServices
         Task<bool> CreateOrder(Order order);
 
         Task<bool> UpdateClientOrderAsync(int id, Order order);
-        bool UpdateOrderItens(int id, Order order);
+        Task<bool> UpdateOrderItensAsync(int id, Order order);
   
 
-        bool OrderExists(int id);
+        Task<bool> OrderExistsAsync(int id);
 
-        bool DeleteOrder(int id);
-        bool UpdateStatus(int id, Order order);
+        Task<bool> DeleteOrderAsync(int id);
+        Task<bool> UpdateStatusAsync(int id, Order order);
         Task<bool> UpdateAddresses(int id, UpdateAdressDto addressToUpdate);
 
     }

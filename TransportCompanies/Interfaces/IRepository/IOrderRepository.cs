@@ -5,21 +5,21 @@ namespace TransportCompanies.Interfaces.IRepository
 {
     public interface IOrderRepository
     {
-        ICollection<Order> GetOrders();
-        Order GetOrderToUpdate(int id, bool tracking = false);
+        Task<ICollection<Order>> GetOrders();
+        Task<Order> GetOrderToUpdate(int id, bool tracking = false);
 
-        Order GetOrderById(int id);
+        Task<Order> GetOrderById(int id);
 
 
-        bool CreateOrder(Order order);
+        Task<bool> CreateOrder(Order order);
 
-        bool UpdateOrder(Order order);
+        Task<bool>   UpdateOrder(Order order);
 
-        bool OrderExists(int id);
+        Task<bool> OrderExists(int id);
 
-        bool DeleteOrder(Order order);
+        Task<bool> DeleteOrder(Order order);
 
-        bool Save();
+        Task<bool> Save();
 
 
     }

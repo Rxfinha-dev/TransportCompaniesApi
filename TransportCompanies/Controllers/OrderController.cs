@@ -22,9 +22,9 @@ namespace TransportCompanies.Controllers
 
         [HttpGet]
         [ProducesResponseType(200, Type = typeof(IEnumerable<Order>))]
-        public IActionResult GetOrders()
+        public async Task<IActionResult> GetOrdersAsync()
         {
-            var orders = _mapper.Map<List<OrderDto>>(_orderService.GetOrders());
+            var orders = _mapper.Map<List<OrderDto>>(await _orderService.GetOrdersAsync());
 
             if(!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -35,12 +35,12 @@ namespace TransportCompanies.Controllers
         [HttpGet("{id}")]
         [ProducesResponseType(200, Type = typeof(Order))]
         [ProducesResponseType(400)]
-        public IActionResult GetOrder(int id)
+        public async Task<IActionResult> GetOrderAsync(int id)
         {
-            if(!_orderService.OrderExists(id))
+            if(!await _orderService.OrderExistsAsync(id))
                 return NotFound();  
 
-            var order = _orderService.GetOrder(id);
+            var order = await _orderService.GetOrderAsync(id);
 
             if(!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -56,8 +56,6 @@ namespace TransportCompanies.Controllers
 
         public async Task<IActionResult> CreateOrder([FromBody]OrderDto orderCreate)
         {
-           
-
             if(orderCreate is null)
                 return BadRequest(ModelState);
 
@@ -84,7 +82,7 @@ namespace TransportCompanies.Controllers
             if (id != orderToUpdate.Id)
                 return BadRequest("Os id's nao coincidem");
 
-            if (!_orderService.OrderExists(id))
+            if (!await _orderService.OrderExistsAsync(id))
                 return NotFound();
             if(!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -104,12 +102,12 @@ namespace TransportCompanies.Controllers
         [ProducesResponseType(400)]
         [ProducesResponseType(204)]
         [ProducesResponseType(404)]
-        public IActionResult UpdateOrderItens(int id, OrderDto orderToUpdate)
+        public async Task<IActionResult> UpdateOrderItensAsync(int id, OrderDto orderToUpdate)
         {
             if (id != orderToUpdate.Id)
                 return BadRequest("Os id's nao coincidem");
 
-            if (!_orderService.OrderExists(id))
+            if (!await _orderService.OrderExistsAsync(id))
                 return NotFound();
 
             if (!ModelState.IsValid)
@@ -117,7 +115,7 @@ namespace TransportCompanies.Controllers
 
             var orderMap = _mapper.Map<Order>(orderToUpdate);
 
-            if (!_orderService.UpdateOrderItens(id, orderMap))
+            if (!await _orderService.UpdateOrderItensAsync(id, orderMap))
             {
                 ModelState.AddModelError("", "Algo deu errado ao Atualizar os itens do pedido");
                 return StatusCode(500, ModelState);
@@ -132,12 +130,12 @@ namespace TransportCompanies.Controllers
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
 
-        public IActionResult UpdateOrderStatus(int id, OrderDto orderToUpdate)
+        public async Task<IActionResult> UpdateOrderStatusAsync(int id, OrderDto orderToUpdate)
         {
             if (id != orderToUpdate.Id)
                 return BadRequest("Os id's nao coincidem");
 
-            if (!_orderService.OrderExists(id))
+            if (!await _orderService.OrderExistsAsync(id))
                 return NotFound();
 
             if (!ModelState.IsValid)
@@ -145,7 +143,7 @@ namespace TransportCompanies.Controllers
 
             var orderMap = _mapper.Map<Order>(orderToUpdate);
 
-            if (!_orderService.UpdateStatus(id, orderMap))
+            if (!await _orderService.UpdateStatusAsync(id, orderMap))
             {
                 ModelState.AddModelError("", "Algo deu errado ao Atualizar o status do pedido");
                 return StatusCode(500, ModelState);
@@ -163,7 +161,7 @@ namespace TransportCompanies.Controllers
             if (addressToUpdate == null)
                 return BadRequest("Objeto inválido.");
 
-            if (!_orderService.OrderExists(id))
+            if (!await _orderService.OrderExistsAsync(id))
                 return NotFound();
 
             if (!ModelState.IsValid)
@@ -182,16 +180,16 @@ namespace TransportCompanies.Controllers
         [ProducesResponseType(204)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
-        public IActionResult DeleteOrder(int id)
+        public async Task<IActionResult> DeleteOrderAsync(int id)
         {
-            if (!_orderService.OrderExists(id))
+            if (!await _orderService.OrderExistsAsync(id))
                 return NotFound();           
            
 
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            if (!_orderService.DeleteOrder(id))
+            if (!await _orderService.DeleteOrderAsync(id))
             {
                 ModelState.AddModelError("", "Algo deu errado ao deletar");
             }
