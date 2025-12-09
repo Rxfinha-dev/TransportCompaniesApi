@@ -1,11 +1,13 @@
-﻿namespace TransportCompanies.DTO
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace TransportCompanies.DTO
 {
     public class UpdateAdressDto
     {
-     
-            public AddressDto Origin { get; set; }
-            public AddressDto Destination { get; set; }
+        [Required(ErrorMessage = "Origem obrigatória")]
+        public AddressDto Origin { get; set; }
 
-
+        [Required(ErrorMessage = "Destino obrigatório")]
+        public AddressDto Destination { get; set; }
     }
 }
