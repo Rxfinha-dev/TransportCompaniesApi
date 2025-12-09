@@ -82,7 +82,7 @@ public class OrderService : IOrderService
     }
 
   
-    public bool UpdateClientOrder(int id, Order orderToUpdate)
+    public async Task<bool> UpdateClientOrderAsync(int id, Order orderToUpdate)
     {
         var order = _orderRepository.GetOrderToUpdate(id, true);
 
@@ -94,7 +94,7 @@ public class OrderService : IOrderService
 
     
 
-        if (!_costumerRepository.CostumerExists(orderToUpdate.costumerId))
+        if (! await _costumerRepository.CostumerExists(orderToUpdate.costumerId))
             throw new Exception("O cliente não existe");
 
 

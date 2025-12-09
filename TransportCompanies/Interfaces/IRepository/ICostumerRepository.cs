@@ -4,16 +4,16 @@ namespace TransportCompanies.Interfaces.IRepository
 {
     public interface ICostumerRepository
     {
-        ICollection<Costumer> GetCostumers();
-        Costumer GetCostumer(int id);
-        Costumer GetCostumer(string cpf);
+        Task<ICollection<Costumer>> GetCostumers();
+        Task<Costumer> GetCostumer(int id);
+        Task<Costumer> GetCostumer(string cpf);
 
-        bool CreateCostumer(Costumer costumer);
-        bool UpdateCostumer(Costumer costumer);
-        bool DeleteCostumer(Costumer costumer);
-        bool CostumerExists(int id);
-        bool CostumerExists(string cpf);
-        bool Save();
+        Task<bool> CreateCostumer(Costumer costumer);
+        Task<bool> UpdateCostumer(Costumer costumer);
+        Task<bool> DeleteCostumer(Costumer costumer);
+        Task<bool> CostumerExists(int id);
+        Task<bool> CostumerExists(string cpf);
+        Task<bool> Save();
 
     }
 }

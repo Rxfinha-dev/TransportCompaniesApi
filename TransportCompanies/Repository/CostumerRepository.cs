@@ -13,55 +13,55 @@ namespace TransportCompanies.Repository
             _context = context;
         }
 
-        public bool CostumerExists(int id)
+        public async Task<bool> CostumerExists(int id)
         {
             return _context.Costumers.Any(c => c.Id == id);
         }
 
-        public bool CostumerExists(string cpf)
+        public async Task<bool> CostumerExists(string cpf)
         {
             return _context.Costumers.Any(c=>c.Cpf.ToUpper() == cpf.ToUpper());
         }
 
-        public bool CreateCostumer(Costumer costumer)
+        public async Task<bool> CreateCostumer(Costumer costumer)
         {
             _context.Add(costumer);
-            return Save();
+            return await Save();
 
         }
 
-        public bool DeleteCostumer(Costumer costumer)
+        public async Task<bool> DeleteCostumer(Costumer costumer)
         {
             _context.Remove(costumer);
-            return Save();
+            return await Save();
 
         }
 
-        public Costumer GetCostumer(int id)
+        public async Task<Costumer> GetCostumer(int id)
         {
             return _context.Costumers.Where(c => c.Id == id).AsNoTracking().FirstOrDefault();
         }
 
-        public Costumer GetCostumer(string cpf)
+        public async Task<Costumer> GetCostumer(string cpf)
         {
             return _context.Costumers.Where(c => c.Cpf == cpf).AsNoTracking().FirstOrDefault();
         }
 
-        public ICollection<Costumer> GetCostumers()
+        public async Task<ICollection<Costumer>> GetCostumers()
         {
            return _context.Costumers.OrderBy(c=>c.Id).AsNoTracking().ToList();
         }
 
-        public bool Save()
+        public async Task<bool> Save()
         {
             var saved = _context.SaveChanges();
             return saved > 0 ? true : false;
         }
 
-        public bool UpdateCostumer(Costumer costumer)
+        public async Task<bool> UpdateCostumer(Costumer costumer)
         {
             _context.Update(costumer);
-            return Save();
+            return await Save();
         }
     }
 }

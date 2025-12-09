@@ -14,7 +14,7 @@ namespace TransportCompanies.Interfaces.IServices
 
         Task<bool> CreateOrder(Order order);
 
-        bool UpdateClientOrder(int id, Order order);
+        Task<bool> UpdateClientOrderAsync(int id, Order order);
         bool UpdateOrderItens(int id, Order order);
   
 

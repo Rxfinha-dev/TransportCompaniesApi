@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using TransportCompanies.DTO;
 using TransportCompanies.Interfaces.IServices;
@@ -12,6 +13,7 @@ namespace TransportCompanies.Controllers
     {
         private readonly ICostumerService _costumerService;
         private readonly IMapper _mapper;
+
         public CostumerController(ICostumerService costumerService, IMapper mapper)
         {
             _costumerService = costumerService;
@@ -20,9 +22,11 @@ namespace TransportCompanies.Controllers
 
         [HttpGet]
         [ProducesResponseType(200, Type = typeof(IEnumerable<Costumer>))]
-        public IActionResult GetCostumers()
+        public async Task<IActionResult> GetCostumersAsync()
         {
-            var costumers = _mapper.Map<List<CostumerDto>>(_costumerService.GetCostumers());
+            var costumers = _mapper.Map<List<CostumerDto>>(
+                await _costumerService.GetCostumersAsync()
+            );
 
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -30,15 +34,15 @@ namespace TransportCompanies.Controllers
             return Ok(costumers);
         }
 
-        [HttpGet("{id}")]       
+        [HttpGet("{id}")]
         [ProducesResponseType(200, Type = typeof(Costumer))]
         [ProducesResponseType(400)]
-        public IActionResult GetCostumer(int id)
+        public async Task<IActionResult> GetCostumerAsync(int id)
         {
-            if (!_costumerService.CostumerExists(id))
+            if (!await _costumerService.CostumerExistsAsync(id))
                 return NotFound();
 
-            var costumer = _mapper.Map<CostumerDto>(_costumerService.GetCostumer(id));
+            var costumer = _mapper.Map<CostumerDto>(await _costumerService.GetCostumerAsync(id));
 
             if (!ModelState.IsValid)
                 return BadRequest();
@@ -49,13 +53,18 @@ namespace TransportCompanies.Controllers
         [HttpPost]
         [ProducesResponseType(204)]
         [ProducesResponseType(400)]
-        public IActionResult CreateCostumer([FromBody]CostumerDto createCostumer)
+        public async Task<IActionResult> CreateCostumer([FromBody] CostumerDto createCostumer)
         {
             if (createCostumer == null)
                 return BadRequest(ModelState);
 
-            var costumer = _costumerService.GetCostumers().Where(r => r.Cpf.Trim().ToUpper() == createCostumer.Cpf.TrimEnd().ToUpper()).FirstOrDefault();
+            string Normalize(string cpf) => cpf.Replace(".", "").Replace("-", "").Trim();
 
+            var costumers = await _costumerService.GetCostumersAsync();
+
+            var normalized = Normalize(createCostumer.Cpf);
+
+            var costumer = costumers.FirstOrDefault(r => Normalize(r.Cpf) == normalized);
 
             if (costumer != null)
             {
@@ -68,34 +77,33 @@ namespace TransportCompanies.Controllers
 
             var costumerMap = _mapper.Map<Costumer>(createCostumer);
 
-            if (!_costumerService.CreateCostumer(costumerMap))
+            if (!await _costumerService.CreateCostumerAsync(costumerMap))
             {
                 ModelState.AddModelError("", "Alguma coisa deu errado ao salvar");
                 return StatusCode(500, ModelState);
             }
 
             return Ok("Criado com sucesso");
-
         }
 
         [HttpPut("{id}")]
         [ProducesResponseType(400)]
         [ProducesResponseType(204)]
         [ProducesResponseType(404)]
-        public IActionResult UpdateCostumer(int id, [FromBody] CostumerDto updatedCostumer)
+        public async Task<IActionResult> UpdateCostumerAsync(int id, [FromBody] CostumerDto updatedCostumer)
         {
-            if(updatedCostumer == null)
+            if (updatedCostumer == null)
                 return BadRequest(ModelState);
-            if(id != updatedCostumer.Id)
+            if (id != updatedCostumer.Id)
                 return BadRequest("id não coincide");
-            if(!_costumerService.CostumerExists(id))
+            if (!await _costumerService.CostumerExistsAsync(id))
                 return NotFound();
             if (!ModelState.IsValid)
                 return BadRequest();
 
             var costumerMap = _mapper.Map<Costumer>(updatedCostumer);
 
-            if (!_costumerService.UpdateCostumer(id, costumerMap))
+            if (!await _costumerService.UpdateCostumerAsync(id, costumerMap))
             {
                 ModelState.AddModelError("", "Algo deu errado ao Atualizar o cliente");
                 return StatusCode(500, ModelState);
@@ -104,28 +112,26 @@ namespace TransportCompanies.Controllers
             return NoContent();
         }
 
-
         [HttpDelete("{id}")]
         [ProducesResponseType(400)]
         [ProducesResponseType(204)]
         [ProducesResponseType(404)]
-        public IActionResult DeleteCostumer(int id)
+        public async Task<IActionResult> DeleteCostumerAsync(int id)
         {
-            if (!_costumerService.CostumerExists(id))
+            if (!await _costumerService.CostumerExistsAsync(id))
                 return NotFound();
 
-            var costumerToDelete = _costumerService.GetCostumer(id);
+            var costumerToDelete = await _costumerService.GetCostumerAsync(id);
 
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            if (!_costumerService.DeleteCostumer(costumerToDelete))
+            if (!await _costumerService.DeleteCostumerAsync(costumerToDelete))
             {
                 ModelState.AddModelError("", "Algo deu errado ao deletar");
             }
 
             return NoContent();
-
         }
     }
 }

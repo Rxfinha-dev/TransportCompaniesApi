@@ -14,14 +14,14 @@ namespace TransportCompanies.Services
             _costumerRepository = costumerRepository;   
         }
 
-        public bool CostumerExists(int id)
+        public async Task<bool> CostumerExistsAsync(int id)
         {
-            return _costumerRepository.CostumerExists(id);
+            return await _costumerRepository.CostumerExists(id);
         }
 
-        public bool CreateCostumer(Costumer costumer)
+        public async Task<bool> CreateCostumerAsync(Costumer costumer)
         {
-            if (_costumerRepository.CostumerExists(costumer.Id))
+            if (await _costumerRepository.CostumerExists(costumer.Id))
                 throw new Exception("cliente já existe");
 
             bool cpfValidation = CpfValidation.Validate(costumer.Cpf);
@@ -29,50 +29,50 @@ namespace TransportCompanies.Services
             if (!cpfValidation)
                 throw new Exception("cpf inválido");
 
-            return _costumerRepository.CreateCostumer(costumer);           
+            return await _costumerRepository.CreateCostumer(costumer);           
         }
 
-        public bool DeleteCostumer(Costumer costumer)
+        public async Task<bool> DeleteCostumerAsync(Costumer costumer)
         {
-            if (!_costumerRepository.CostumerExists(costumer.Id))
+            if (!await _costumerRepository.CostumerExists(costumer.Id))
                 throw new Exception("cliente não existe");
 
-            return _costumerRepository.DeleteCostumer(costumer);
+            return await _costumerRepository.DeleteCostumer(costumer);
         }
 
-        public Costumer GetCostumer(int id)
+        public async Task<Costumer> GetCostumerAsync(int id)
         {
-            if (!_costumerRepository.CostumerExists(id))
+            if (!await _costumerRepository.CostumerExists(id))
                 throw new Exception("cliente não existe");
 
-            return _costumerRepository.GetCostumer(id);
+            return await _costumerRepository.GetCostumer(id);
         }
 
-        public Costumer GetCostumer(string cpf)
+        public async Task<Costumer> GetCostumerAsync(string cpf)
         {
-            if (!_costumerRepository.CostumerExists(cpf))
+            if (!await _costumerRepository.CostumerExists(cpf))
                 throw new Exception("cliente não existe");
 
-            return _costumerRepository.GetCostumer(cpf);
+            return await _costumerRepository.GetCostumer(cpf);
         }
 
      
 
-        public ICollection<Costumer> GetCostumers()
+        public async Task<ICollection<Costumer>> GetCostumersAsync()
         {
-            return _costumerRepository.GetCostumers();
+            return await _costumerRepository.GetCostumers();
         }
 
-        public bool UpdateCostumer(int id,Costumer costumer)
+        public async Task<bool> UpdateCostumerAsync(int id,Costumer costumer)
         {
           
-            if (!_costumerRepository.CostumerExists(costumer.Id))
+            if (!await _costumerRepository.CostumerExists(costumer.Id))
                     throw new Exception("Cliente não cadastrada");
             bool cpfValidation = CpfValidation.Validate(costumer.Cpf);
             if (!cpfValidation)
                 throw new Exception("cpf inválido");
             
-            return _costumerRepository.UpdateCostumer(costumer);
+            return await _costumerRepository.UpdateCostumer(costumer);
 
         }
     }

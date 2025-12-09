@@ -79,7 +79,7 @@ namespace TransportCompanies.Controllers
         [ProducesResponseType(400)]
         [ProducesResponseType(204)]
         [ProducesResponseType(404)]
-        public IActionResult UpdateClientOrder(int id, OrderDto orderToUpdate)
+        public async Task<IActionResult> UpdateClientOrderAsync(int id, OrderDto orderToUpdate)
         {
             if (id != orderToUpdate.Id)
                 return BadRequest("Os id's nao coincidem");
@@ -91,7 +91,7 @@ namespace TransportCompanies.Controllers
 
             var orderMap = _mapper.Map<Order>(orderToUpdate);
 
-            if(!_orderService.UpdateClientOrder(id, orderMap))
+            if(!await _orderService.UpdateClientOrderAsync(id, orderMap))
             {
                 ModelState.AddModelError("", "Algo deu errado ao Atualizar o cliente q fez o pedido");
                 return StatusCode(500, ModelState);

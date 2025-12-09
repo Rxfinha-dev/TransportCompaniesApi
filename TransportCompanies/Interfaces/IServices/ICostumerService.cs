@@ -5,14 +5,14 @@ namespace TransportCompanies.Interfaces.IServices
 {
     public interface ICostumerService
     {
-        ICollection<Costumer> GetCostumers();
-        Costumer GetCostumer(int id);
-        Costumer GetCostumer(string cpf);
+        Task<ICollection<Costumer>> GetCostumersAsync();
+        Task<Costumer> GetCostumerAsync(int id);
+        Task<Costumer> GetCostumerAsync(string cpf);
 
-        bool CreateCostumer(Costumer costumer);
-        bool UpdateCostumer(int id, Costumer costumer);
-        bool DeleteCostumer(Costumer costumer);
-        bool CostumerExists(int id);
+        Task<bool> CreateCostumerAsync(Costumer costumer);
+        Task<bool> UpdateCostumerAsync(int id, Costumer costumer);
+        Task<bool> DeleteCostumerAsync(Costumer costumer);
+        Task<bool> CostumerExistsAsync(int id);
 
        
     }
