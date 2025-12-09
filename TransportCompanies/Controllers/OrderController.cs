@@ -185,9 +185,8 @@ namespace TransportCompanies.Controllers
         public IActionResult DeleteOrder(int id)
         {
             if (!_orderService.OrderExists(id))
-                return NotFound();
-            
-            var orderToDelete = _orderService.DeleteOrder(id);
+                return NotFound();           
+           
 
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
