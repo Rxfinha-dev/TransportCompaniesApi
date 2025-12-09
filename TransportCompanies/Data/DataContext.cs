@@ -22,14 +22,13 @@ namespace TransportCompanies.Data
                 .OwnsOne(typeof(AddressDto), "Origin");
             modelBuilder.Entity<Order>()
                 .OwnsOne(typeof(AddressDto), "Destination");
-
             modelBuilder.Entity<Order>()
-                .Property(o => o.orderedItens)
-                .HasConversion
-                (
-                    v => JsonSerializer.Serialize(v, (JsonSerializerOptions)null),
-                    v => JsonSerializer.Deserialize<ICollection<ItemDto>>(v, (JsonSerializerOptions)null)
-                );
+                .OwnsMany(o=>o.orderedItens, b =>
+                {
+                    b.ToJson();
+                });
+
+             
 
         }
     }
