@@ -69,13 +69,11 @@ namespace TransportCompanies.Repository
                 },
                 TransportCompany = new TransportCompany
                 {
-                    Name = o.Costumer.Name
+                    Name = o.TransportCompany.Name
                 }
 
 
             }).OrderBy(o => o.Id).AsNoTracking().ToList();
-               
-               
                
         }
 
@@ -95,7 +93,6 @@ namespace TransportCompanies.Repository
              _context.Update(order);
             return Save();
 
-
         }
 
         public Order GetOrderById(int id)
@@ -114,17 +111,20 @@ namespace TransportCompanies.Repository
 
                      Status = new Status
                      {
+                         Id = o.statusID,
                          Description = o.Status.Description
                      },
 
                      Costumer = new Costumer
                      {
+                         Id = o.costumerId,
                          Name = o.Costumer.Name,
                          Cpf = o.Costumer.Cpf
                      },
                      TransportCompany = new TransportCompany
                      {
-                         Name = o.Costumer.Name
+                         Id = o.transportCompanyId,
+                         Name = o.TransportCompany.Name
                      }
                  })
                  .AsNoTracking()

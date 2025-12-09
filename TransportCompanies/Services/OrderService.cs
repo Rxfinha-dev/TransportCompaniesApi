@@ -50,18 +50,10 @@ public class OrderService : IOrderService
             throw new Exception("O pedido já foi despachado");
 
         if (order == null)
-            return false;
-
-        if (!await IsCepValid(addressToUpdate.Origin.Cep))
-            throw new Exception("Cep de origem inválido");
-
-        if (!await IsCepValid(addressToUpdate.Origin.Cep))
-            throw new Exception("Cep de destino inválido");
-
-
-
-        order.Origin = addressToUpdate.Origin;
-        order.Destination = addressToUpdate.Destination;
+            throw new Exception("Pedido não encontrado");
+        
+        order.Origin = await GetAddressByCep(addressToUpdate.Origin);
+        order.Destination = await GetAddressByCep(addressToUpdate.Destination);
 
         return _orderRepository.Save();
     }
@@ -82,10 +74,8 @@ public class OrderService : IOrderService
     public async Task<bool> CreateOrder(Order order)
     {
 
-        if (!await IsCepValid(order.Origin.Cep))
-            throw new Exception("Cep de origem inválido");
-        if(!await IsCepValid(order.Destination.Cep))
-            throw new Exception("Cep de destino inválido");
+       order.Origin = await GetAddressByCep(order.Origin);
+       order.Destination = await GetAddressByCep(order.Destination);
 
         return _orderRepository.CreateOrder(order);
             
@@ -163,6 +153,26 @@ public class OrderService : IOrderService
         var json = await response.Content.ReadAsStringAsync();
 
         return json.Contains("\"erro\"") ? false : true;
+    }
+
+    public async Task<AddressDto> GetAddressByCep(AddressDto addressDto)
+    {
+        var response = await _client.GetAsync($"https://viacep.com.br/ws/{addressDto.Cep}/json/");
+
+        if (!response.IsSuccessStatusCode)
+            throw new Exception("CEP inválido");
+
+        var address = await response.Content.ReadFromJsonAsync<ViaCepResponse>();
+
+        if (address is null || address.erro is true)
+            throw new Exception("Erro ao obter endereço!");
+
+        addressDto.Rua = address.logradouro;
+        addressDto.Bairro = address.bairro;
+        addressDto.Cidade = address.localidade;
+        addressDto.Estado = address.uf;
+
+        return addressDto;
     }
 
 

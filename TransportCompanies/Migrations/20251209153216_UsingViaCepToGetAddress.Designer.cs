@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TransportCompanies.Data;
 
@@ -10,9 +11,11 @@ using TransportCompanies.Data;
 namespace TransportCompanies.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20251209153216_UsingViaCepToGetAddress")]
+    partial class UsingViaCepToGetAddress
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -154,6 +157,7 @@ namespace TransportCompanies.Migrations
                                 .HasColumnType("int");
 
                             b1.Property<string>("Bairro")
+                                .IsRequired()
                                 .HasColumnType("nvarchar(max)");
 
                             b1.Property<string>("Cep")
@@ -161,18 +165,21 @@ namespace TransportCompanies.Migrations
                                 .HasColumnType("nvarchar(max)");
 
                             b1.Property<string>("Cidade")
+                                .IsRequired()
                                 .HasColumnType("nvarchar(max)");
 
                             b1.Property<string>("Complement")
                                 .HasColumnType("nvarchar(max)");
 
                             b1.Property<string>("Estado")
+                                .IsRequired()
                                 .HasColumnType("nvarchar(max)");
 
                             b1.Property<int>("Number")
                                 .HasColumnType("int");
 
                             b1.Property<string>("Rua")
+                                .IsRequired()
                                 .HasColumnType("nvarchar(max)");
 
                             b1.HasKey("OrderId");
@@ -189,6 +196,7 @@ namespace TransportCompanies.Migrations
                                 .HasColumnType("int");
 
                             b1.Property<string>("Bairro")
+                                .IsRequired()
                                 .HasColumnType("nvarchar(max)");
 
                             b1.Property<string>("Cep")
@@ -196,18 +204,21 @@ namespace TransportCompanies.Migrations
                                 .HasColumnType("nvarchar(max)");
 
                             b1.Property<string>("Cidade")
+                                .IsRequired()
                                 .HasColumnType("nvarchar(max)");
 
                             b1.Property<string>("Complement")
                                 .HasColumnType("nvarchar(max)");
 
                             b1.Property<string>("Estado")
+                                .IsRequired()
                                 .HasColumnType("nvarchar(max)");
 
                             b1.Property<int>("Number")
                                 .HasColumnType("int");
 
                             b1.Property<string>("Rua")
+                                .IsRequired()
                                 .HasColumnType("nvarchar(max)");
 
                             b1.HasKey("OrderId");
