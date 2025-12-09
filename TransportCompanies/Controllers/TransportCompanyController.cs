@@ -20,9 +20,9 @@ namespace TransportCompanies.Controllers
 
         [HttpGet]
         [ProducesResponseType(200, Type = typeof(IEnumerable<TransportCompany>))]
-        public IActionResult GetTransportCompanies()
+        public async Task<IActionResult> GetTransportCompaniesAsync()
         {
-            var companies = _mapper.Map<List<TransportCompanyDto>>(_transportCompanyService.GetTransportCompanies());
+            var companies = _mapper.Map<List<TransportCompanyDto>>(await _transportCompanyService.GetTransportCompanies());
 
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -32,12 +32,12 @@ namespace TransportCompanies.Controllers
         [HttpGet("{id}")]
         [ProducesResponseType(200, Type = typeof(TransportCompany))]
         [ProducesResponseType(400)]
-        public IActionResult GetTransportCompany(int id)
+        public async Task<IActionResult> GetTransportCompanyAsync(int id)
         {
-            if (!_transportCompanyService.TransportCompanyExists(id))
+            if (! await _transportCompanyService.TransportCompanyExists(id))
                 return NotFound();
 
-            var company = _mapper.Map<TransportCompanyDto>(_transportCompanyService.GetTransportCompany(id));
+            var company = _mapper.Map<TransportCompanyDto>(await _transportCompanyService.GetTransportCompany(id));
 
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -48,9 +48,9 @@ namespace TransportCompanies.Controllers
         [HttpPost]
         [ProducesResponseType(204)]
         [ProducesResponseType(400)]
-        public IActionResult CreateTransportCompany([FromBody]TransportCompanyDto company)
+        public async Task<IActionResult> CreateTransportCompanyAsync([FromBody]TransportCompanyDto company)
         {
-            if (_transportCompanyService.TransportCompanyExists(company.Id))
+            if (await _transportCompanyService.TransportCompanyExists(company.Id))
             {
                 ModelState.AddModelError("", "Transportadora já existe");
                 return StatusCode(422, ModelState);
@@ -62,7 +62,7 @@ namespace TransportCompanies.Controllers
 
             var companyMap = _mapper.Map<TransportCompany>(company);
 
-            if(!_transportCompanyService.CreateTransportCompany(companyMap))
+            if(!await _transportCompanyService.CreateTransportCompany(companyMap))
             {
                 ModelState.AddModelError("","Algo deu errado ao criar a Transportadora");
                 return StatusCode(500, ModelState);
@@ -77,20 +77,20 @@ namespace TransportCompanies.Controllers
         [ProducesResponseType(400)]
         [ProducesResponseType(204)]
         [ProducesResponseType(404)]
-        public IActionResult UpdateTransportCompany(int id, [FromBody]TransportCompanyDto updatedCompany)
+        public async Task<IActionResult> UpdateTransportCompanyAsync(int id, [FromBody]TransportCompanyDto updatedCompany)
         {
             if(updatedCompany == null)
                 return BadRequest(ModelState);
             if(id != updatedCompany.Id)
                 return BadRequest(ModelState);
-            if(!_transportCompanyService.TransportCompanyExists(id))
+            if(!await _transportCompanyService.TransportCompanyExists(id))
                 return NotFound();
             if (!ModelState.IsValid)
                 return BadRequest();
 
             var companyMap = _mapper.Map<TransportCompany>(updatedCompany);
 
-            if (!_transportCompanyService.UpdateTransportCompany(id, companyMap))
+            if (!await _transportCompanyService.UpdateTransportCompany(id, companyMap))
             {
                 ModelState.AddModelError("", "Algo deu errado ao Atualizar a transportadora");
                 return StatusCode(500, ModelState);
@@ -103,17 +103,17 @@ namespace TransportCompanies.Controllers
         [ProducesResponseType(400)]
         [ProducesResponseType(204)]
         [ProducesResponseType(404)]
-        public IActionResult DeleteTransportCompany(int id)
+        public async Task<IActionResult> DeleteTransportCompanyAsync(int id)
         {
-            if (!_transportCompanyService.TransportCompanyExists(id))
+            if (!await _transportCompanyService.TransportCompanyExists(id))
                 return NotFound();
 
-            var companyToDelete = _transportCompanyService.GetTransportCompany(id);
+            var companyToDelete = await _transportCompanyService.GetTransportCompany(id);
 
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            if (!_transportCompanyService.DeleteTransportCompany(companyToDelete))
+            if (!await _transportCompanyService.DeleteTransportCompany(companyToDelete))
             {
                 ModelState.AddModelError("", "Algo deu errado ao deletar");
                 return StatusCode(500, "Erro ao remover");

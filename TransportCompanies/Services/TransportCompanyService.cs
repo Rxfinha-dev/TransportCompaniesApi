@@ -13,47 +13,47 @@ namespace TransportCompanies.Services
         {
             _transportCompanyRepository = transportCompanyRepository;
         }
-        public bool CreateTransportCompany(TransportCompany company)
+        public async Task<bool> CreateTransportCompany(TransportCompany company)
         {
-            if (_transportCompanyRepository.TransportCompanyExists(company.Id))
+            if (await _transportCompanyRepository.TransportCompanyExists(company.Id))
                 throw new Exception("Transportadora já cadastrada");
 
-            return _transportCompanyRepository.CreateTransportCompany(company);
+            return await _transportCompanyRepository.CreateTransportCompany(company);
         }
 
-        public bool DeleteTransportCompany(TransportCompany company)
+        public async Task<bool> DeleteTransportCompany(TransportCompany company)
         {
-            if (!_transportCompanyRepository.TransportCompanyExists(company.Id))
+            if (! await _transportCompanyRepository.TransportCompanyExists(company.Id))
                 throw new Exception("Transportadora não cadastrada");
 
-            return _transportCompanyRepository.DeleteTransportCompany(company);
+            return await _transportCompanyRepository.DeleteTransportCompany(company);
 
         }
 
-        public ICollection<TransportCompany> GetTransportCompanies()
+        public async Task<ICollection<TransportCompany>> GetTransportCompanies()
         {
-            return _transportCompanyRepository.GetTransportCompanies();
+            return await _transportCompanyRepository.GetTransportCompanies();
         }
 
-        public TransportCompany GetTransportCompany(int id)
+        public async Task<TransportCompany> GetTransportCompany(int id)
         {
-            if (!_transportCompanyRepository.TransportCompanyExists(id))
+            if (!await _transportCompanyRepository.TransportCompanyExists(id))
                 throw new Exception("Transportadora não cadastrada");
 
-            return _transportCompanyRepository.GetTransportCompany(id);
+            return await _transportCompanyRepository.GetTransportCompany(id);
         }
 
-        public bool TransportCompanyExists(int id)
+        public async Task<bool> TransportCompanyExists(int id)
         {
-            return _transportCompanyRepository.TransportCompanyExists(id);  
+            return await _transportCompanyRepository.TransportCompanyExists(id);  
         }
 
-        public bool UpdateTransportCompany(int id, TransportCompany company)
+        public async Task<bool> UpdateTransportCompany(int id, TransportCompany company)
         {
-            if (!_transportCompanyRepository.TransportCompanyExists(company.Id))
+            if (!await _transportCompanyRepository.TransportCompanyExists(company.Id))
                 throw new Exception("Transportadora não cadastrada");
 
-            return _transportCompanyRepository.UpdateTransportCompany(company);
+            return await _transportCompanyRepository.UpdateTransportCompany(company);
         }
     }
 }

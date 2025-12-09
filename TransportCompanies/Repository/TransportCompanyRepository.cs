@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System.Threading.Tasks;
 using TransportCompanies.Data;
 using TransportCompanies.Interfaces.IRepository;
 using TransportCompanies.Models;
@@ -13,43 +14,43 @@ namespace TransportCompanies.Repository
             _context = context;
         }
 
-        public bool CreateTransportCompany(TransportCompany company)
+        public async Task<bool> CreateTransportCompany(TransportCompany company)
         {
             _context.Add(company);
-            return Save();
+            return await Save();
         }
 
-        public bool DeleteTransportCompany(TransportCompany company)
+        public async Task<bool> DeleteTransportCompany(TransportCompany company)
         {
             _context.Remove(company);
-            return Save();
+            return await Save();
         }
 
-        public ICollection<TransportCompany> GetTransportCompanies()
+        public async Task<ICollection<TransportCompany>> GetTransportCompanies()
         {
             return _context.TransportCompanies.OrderBy(t=>t.Id).AsNoTracking().ToList();
         }
 
-        public TransportCompany GetTransportCompany(int id)
+        public async Task<TransportCompany> GetTransportCompany(int id)
         {
             return _context.TransportCompanies.Where(t => t.Id == id).AsNoTracking().FirstOrDefault();
         }
 
-        public bool Save()
+        public async Task<bool> Save()
         {
             var saved = _context.SaveChanges();
-            return saved > 0 ? true : false;
+             return saved > 0 ? true : false;
         }
 
-        public bool TransportCompanyExists(int id)
+        public async Task<bool> TransportCompanyExists(int id)
         {
             return _context.TransportCompanies.Any(t=>t.Id == id);
         }
 
-        public bool UpdateTransportCompany(TransportCompany company)
+        public async Task<bool> UpdateTransportCompany(TransportCompany company)
         {
             _context.Update(company);
-            return Save();
+            return await Save();
         }
     }
 }

@@ -4,17 +4,17 @@ namespace TransportCompanies.Interfaces.IRepository
 {
     public interface ITransportCompanyRepository
     {
-        ICollection<TransportCompany> GetTransportCompanies();
+        Task<ICollection<TransportCompany>> GetTransportCompanies();
 
-        TransportCompany GetTransportCompany(int id);
+        Task<TransportCompany> GetTransportCompany(int id);
 
-        bool CreateTransportCompany(TransportCompany company);
+        Task<bool> CreateTransportCompany(TransportCompany company);
 
-        bool UpdateTransportCompany(TransportCompany company);
+        Task<bool> UpdateTransportCompany(TransportCompany company);
 
-        bool DeleteTransportCompany(TransportCompany company);
-        bool TransportCompanyExists(int id);
+        Task<bool> DeleteTransportCompany(TransportCompany company);
+        Task<bool> TransportCompanyExists(int id);
 
-        bool Save();
+        Task<bool> Save();
     }
 }
