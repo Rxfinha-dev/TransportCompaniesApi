@@ -24,7 +24,7 @@ public class OrderService : IOrderService
     public bool UpdateStatus(int id, Order orderToUpdate)
     {
 
-        var order = _orderRepository.GetOrder(id, true);
+        var order = _orderRepository.GetOrderToUpdate(id, true);
 
         if (order is null)
             throw new Exception("Pedido não encontrado");
@@ -44,7 +44,7 @@ public class OrderService : IOrderService
     {
        
 
-        var order = _orderRepository.GetOrder(id, true);
+        var order = _orderRepository.GetOrderToUpdate(id, true);
 
         if (order.IsDispatched)
             throw new Exception("O pedido já foi despachado");
@@ -76,7 +76,7 @@ public class OrderService : IOrderService
         if(!_orderRepository.OrderExists(id))
             return null;
 
-        return _orderRepository.GetOrder(id);            
+        return _orderRepository.GetOrderById(id);            
     }
 
     public async Task<bool> CreateOrder(Order order)
@@ -94,7 +94,7 @@ public class OrderService : IOrderService
   
     public bool UpdateClientOrder(int id, Order orderToUpdate)
     {
-        var order = _orderRepository.GetOrder(id, true);
+        var order = _orderRepository.GetOrderToUpdate(id, true);
 
         if (order is null)
             return false;
@@ -119,7 +119,7 @@ public class OrderService : IOrderService
     {
 
        
-        var order = _orderRepository.GetOrder(id,true);
+        var order = _orderRepository.GetOrderToUpdate(id,true);
 
         if (orderToUpdate.orderedItens is null)
             throw new Exception("items is null");

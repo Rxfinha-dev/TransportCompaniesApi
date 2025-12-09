@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using TransportCompanies.Data;
+using TransportCompanies.DTO;
 using TransportCompanies.Interfaces.IRepository;
 using TransportCompanies.Models;
 
@@ -27,7 +28,7 @@ namespace TransportCompanies.Repository
             return Save();
         }
 
-        public Order GetOrder(int id, bool tracking = false)
+        public Order GetOrderToUpdate(int id, bool tracking = false)
         {
             var order = _context.Orders.Include(o => o.Costumer)
                 .Include(o => o.TransportCompany)
@@ -95,6 +96,39 @@ namespace TransportCompanies.Repository
             return Save();
 
 
+        }
+
+        public Order GetOrderById(int id)
+        {
+            return _context.Orders.Where(o => o.Id == id)
+                 .Select(o => new Order
+                 {
+                     Id = o.Id,
+                     orderedItens = o.orderedItens,
+                     Origin = o.Origin,
+                     Destination = o.Destination,
+                     statusID = o.statusID,
+                     costumerId = o.costumerId,
+                     transportCompanyId = o.TransportCompany.Id,
+                     IsDispatched = o.IsDispatched,
+
+                     Status = new Status
+                     {
+                         Description = o.Status.Description
+                     },
+
+                     Costumer = new Costumer
+                     {
+                         Name = o.Costumer.Name,
+                         Cpf = o.Costumer.Cpf
+                     },
+                     TransportCompany = new TransportCompany
+                     {
+                         Name = o.Costumer.Name
+                     }
+                 })
+                 .AsNoTracking()
+                .FirstOrDefault();
         }
     }
 }

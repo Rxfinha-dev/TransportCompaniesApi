@@ -1,11 +1,14 @@
-﻿using TransportCompanies.Models;
+﻿using TransportCompanies.DTO;
+using TransportCompanies.Models;
 
 namespace TransportCompanies.Interfaces.IRepository
 {
     public interface IOrderRepository
     {
         ICollection<Order> GetOrders();
-        Order GetOrder(int id, bool tracking = false);
+        Order GetOrderToUpdate(int id, bool tracking = false);
+
+        Order GetOrderById(int id);
 
 
         bool CreateOrder(Order order);

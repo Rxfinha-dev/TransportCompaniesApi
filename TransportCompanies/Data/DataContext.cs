@@ -26,9 +26,7 @@ namespace TransportCompanies.Data
                 .OwnsMany(o=>o.orderedItens, b =>
                 {
                     b.ToJson();
-                });
-
-             
+                });            
 
         }
     }
