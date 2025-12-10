@@ -31,6 +31,8 @@ builder.Services.AddScoped<ICostumerRepository, CostumerRepository>();
 builder.Services.AddScoped<ICostumerService, CostumerService>();
 builder.Services.AddScoped<IOrderService, OrderService>();
 builder.Services.AddScoped<IOrderRepository, OrderRepositorycs>();
+builder.Services.AddScoped<ITrackingRepository, TrackingRepository>();
+builder.Services.AddScoped<ITrackingService, TrackingService>();
 
 builder
     .Services.AddControllers()

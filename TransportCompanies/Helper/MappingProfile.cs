@@ -15,6 +15,8 @@ namespace TransportCompanies.Helper
             CreateMap<StatusDto, Status>();
             CreateMap<TransportCompany, TransportCompanyDto>();
             CreateMap<TransportCompanyDto, TransportCompany>();
+            CreateMap<Tracking, TrackingDto>();
+            CreateMap<CreateTrackingEventDto, Tracking>();
         }
     }
 }
