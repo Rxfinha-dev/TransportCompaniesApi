@@ -25,7 +25,7 @@ namespace TransportCompanies.Repository
 
         public async Task<bool> CreateCostumer(Costumer costumer)
         {
-            _context.Add(costumer);
+           await _context.AddAsync(costumer);
             return await Save();
 
         }
@@ -39,23 +39,32 @@ namespace TransportCompanies.Repository
 
         public async Task<Costumer> GetCostumer(int id)
         {
-            return _context.Costumers.Where(c => c.Id == id).AsNoTracking().FirstOrDefault();
+            return await _context.Costumers
+                .Where(c => c.Id == id)
+                    .AsNoTracking()
+                        .FirstOrDefaultAsync();
         }
 
         public async Task<Costumer> GetCostumer(string cpf)
         {
-            return _context.Costumers.Where(c => c.Cpf == cpf).AsNoTracking().FirstOrDefault();
+            return await _context.Costumers
+                .Where(c => c.Cpf == cpf)
+                    .AsNoTracking()
+                        .FirstOrDefaultAsync();
         }
 
         public async Task<ICollection<Costumer>> GetCostumers()
         {
-           return _context.Costumers.OrderBy(c=>c.Id).AsNoTracking().ToList();
+           return await _context.Costumers
+                .OrderBy(c=>c.Id)
+                    .AsNoTracking()
+                         .ToListAsync();
         }
 
         public async Task<bool> Save()
         {
-            var saved = _context.SaveChanges();
-            return saved > 0 ? true : false;
+            var saved = _context.SaveChangesAsync();
+            return await saved > 0 ? true : false;
         }
 
         public async Task<bool> UpdateCostumer(Costumer costumer)

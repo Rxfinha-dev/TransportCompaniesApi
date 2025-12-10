@@ -15,7 +15,7 @@ namespace TransportCompanies.Repository
 
         public async Task<bool> CreateStatus(Status status)
         {
-            _context.Add(status);
+           await _context.AddAsync(status);
                 return await Save();
         }
 
@@ -28,18 +28,23 @@ namespace TransportCompanies.Repository
 
         public async Task<Status> GetStatus(int id)
         {
-            return _context.Statuses.Where(s => s.Id == id).FirstOrDefault();
+            return await _context.Statuses
+                .Where(s => s.Id == id)
+                    .FirstOrDefaultAsync();
         }
 
         public async Task<ICollection<Status>> GetStatuses()
         {
-            return _context.Statuses.OrderBy(s=>s.Id).AsNoTracking().ToList();
+            return await _context.Statuses
+                .OrderBy(s => s.Id)
+                    .AsNoTracking()
+                        .ToListAsync();
         }
 
         public async Task<bool> Save()
         {
-            var saved = _context.SaveChanges();
-            return saved > 0 ? true : false;
+            var saved = _context.SaveChangesAsync();
+            return await saved > 0 ? true : false;
         }
 
         public async Task<bool> StatusExists(int id)

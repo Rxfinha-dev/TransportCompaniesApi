@@ -16,8 +16,9 @@ namespace TransportCompanies.Repository
 
         public async Task<bool> CreateTransportCompany(TransportCompany company)
         {
-            _context.Add(company);
+           await _context.AddAsync(company);
             return await Save();
+          
         }
 
         public async Task<bool> DeleteTransportCompany(TransportCompany company)
@@ -28,18 +29,24 @@ namespace TransportCompanies.Repository
 
         public async Task<ICollection<TransportCompany>> GetTransportCompanies()
         {
-            return _context.TransportCompanies.OrderBy(t=>t.Id).AsNoTracking().ToList();
+            return await _context.TransportCompanies
+                .OrderBy(t=>t.Id)
+                    .AsNoTracking()
+                        .ToListAsync();
         }
 
         public async Task<TransportCompany> GetTransportCompany(int id)
         {
-            return _context.TransportCompanies.Where(t => t.Id == id).AsNoTracking().FirstOrDefault();
+            return await _context.TransportCompanies
+                .Where(t => t.Id == id)
+                    .AsNoTracking()
+                         .FirstOrDefaultAsync();
         }
 
         public async Task<bool> Save()
         {
-            var saved = _context.SaveChanges();
-             return saved > 0 ? true : false;
+            var saved = _context.SaveChangesAsync();
+             return await saved > 0 ? true : false;
         }
 
         public async Task<bool> TransportCompanyExists(int id)

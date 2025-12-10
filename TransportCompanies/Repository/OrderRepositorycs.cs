@@ -17,7 +17,7 @@ namespace TransportCompanies.Repository
 
         public async Task<bool> CreateOrder(Order order)
         {
-            _context.Add(order);
+            _context.AddAsync(order);
             return await Save();
               
         }
@@ -30,22 +30,24 @@ namespace TransportCompanies.Repository
 
         public async Task<Order> GetOrderToUpdate(int id, bool tracking = false)
         {
-            var order = _context.Orders.Include(o => o.Costumer)
-                .Include(o => o.TransportCompany)
-                .Include(o => o.Status).AsQueryable();
+            var order = _context.Orders
+                .Include(o => o.Costumer)
+                    .Include(o => o.TransportCompany)
+                        .Include(o => o.Status)
+                            .AsQueryable();
             
             if (!tracking)  
             {
                 order = order.AsNoTracking();
             }
             
-            return order.FirstOrDefault(o=>o.Id == id);
+            return await order.FirstOrDefaultAsync(o=>o.Id == id);
             
         }
 
         public async Task<ICollection<Order>> GetOrders()
         {
-            return _context.Orders.Select(o => new Order
+            return await _context.Orders.Select(o => new Order
             {
 
                 Id = o.Id,
@@ -73,7 +75,9 @@ namespace TransportCompanies.Repository
                 }
 
 
-            }).OrderBy(o => o.Id).AsNoTracking().ToList();
+            }).OrderBy(o => o.Id)
+                .AsNoTracking()
+                    .ToListAsync();
                
         }
 
@@ -84,8 +88,8 @@ namespace TransportCompanies.Repository
 
         public async Task<bool> Save()
         {
-            var saved = _context.SaveChanges();
-            return saved > 0 ? true : false;
+            var saved = _context.SaveChangesAsync();
+            return await saved > 0 ? true : false;
         }
 
         public async Task<bool> UpdateOrder(Order order)
