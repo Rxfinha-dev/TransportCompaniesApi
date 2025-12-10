@@ -1,4 +1,10 @@
-﻿namespace TransportCompanies.Middleware
+﻿using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
+using System.Data;
+using System.Security;
+
+namespace TransportCompanies.Middleware
 {
     public class ExceptionHandlingMiddleware
     {
@@ -30,9 +36,18 @@
             context.Response.StatusCode = exception switch
             {
                 KeyNotFoundException => StatusCodes.Status404NotFound,
+                ValidationException => StatusCodes.Status400BadRequest,
+                FormatException => StatusCodes.Status400BadRequest,
+                ArgumentNullException => StatusCodes.Status400BadRequest,
+                InvalidOperationException => StatusCodes.Status400BadRequest,
                 ArgumentException => StatusCodes.Status400BadRequest,
                 UnauthorizedAccessException => StatusCodes.Status401Unauthorized,
-                _ => StatusCodes.Status500InternalServerError
+                DbUpdateException => StatusCodes.Status500InternalServerError,     
+                DuplicateNameException => StatusCodes.Status409Conflict,
+                SecurityException => StatusCodes.Status403Forbidden,
+                TimeoutException => StatusCodes.Status504GatewayTimeout,
+                SqlException => StatusCodes.Status400BadRequest,
+                _ => StatusCodes.Status500InternalServerError,
             };
 
             return context.Response.WriteAsJsonAsync(new
