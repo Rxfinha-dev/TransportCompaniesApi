@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Mvc;
 using TransportCompanies.Interfaces.IRepository;
 using TransportCompanies.Interfaces.IServices;
 using TransportCompanies.Models;
@@ -6,6 +7,7 @@ using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace TransportCompanies.Services
 {
+    
     public class TransportCompanyService : ITransportCompanyService
     {
         private readonly ITransportCompanyRepository _transportCompanyRepository;
@@ -13,12 +15,16 @@ namespace TransportCompanies.Services
         {
             _transportCompanyRepository = transportCompanyRepository;
         }
+        
+        
         public async Task<bool> CreateTransportCompany(TransportCompany company)
         {
             if (await _transportCompanyRepository.TransportCompanyExists(company.Id))
                 throw new Exception("Transportadora já cadastrada");
 
-            return await _transportCompanyRepository.CreateTransportCompany(company);
+
+                return await _transportCompanyRepository.CreateTransportCompany(company);               
+          
         }
 
         public async Task<bool> DeleteTransportCompany(TransportCompany company)
