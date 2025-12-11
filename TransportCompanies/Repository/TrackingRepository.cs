@@ -13,6 +13,8 @@ namespace TransportCompanies.Repository
             _context = context;
         }
 
+     
+
         public async Task AddEventAsync(Tracking tracking)
         {
             await _context.TrackingEvents.AddAsync(tracking);
@@ -36,6 +38,7 @@ namespace TransportCompanies.Repository
                             .FirstOrDefaultAsync();
         }
 
+  
         public async Task<bool> SaveAsync()
         {
             var saved = await _context.SaveChangesAsync();

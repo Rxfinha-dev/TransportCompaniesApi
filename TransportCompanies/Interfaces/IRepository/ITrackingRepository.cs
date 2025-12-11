@@ -10,6 +10,7 @@ namespace TransportCompanies.Interfaces.IRepository
         Task AddEventAsync(Tracking ev);
         Task<ICollection<Tracking>> GetEventsByOrderAsync(int orderId);
         Task<Tracking?> GetLatestEventAsync(int orderId);
+        
         Task<bool> SaveAsync();
     }
 }

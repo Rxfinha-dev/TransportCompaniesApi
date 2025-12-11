@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using TransportCompanies.Data;
 using TransportCompanies.DTO;
 using TransportCompanies.Interfaces.IServices;
 using TransportCompanies.Models;
@@ -10,10 +12,12 @@ namespace TransportCompanies.Controllers
     public class TrackingController : Controller
     {
         private readonly ITrackingService _trackingService;
+        private readonly DataContext _context;
 
-        public TrackingController(ITrackingService trackingService)
+        public TrackingController(ITrackingService trackingService, DataContext context)
         {
             _trackingService = trackingService;
+            _context = context;
         }
 
         [HttpPost]
@@ -29,6 +33,27 @@ namespace TransportCompanies.Controllers
 
             await _trackingService.AddTrackingEventAsync(orderId, dto);
             return NoContent();
+        }
+
+
+
+        [HttpGet("quantity")]
+        [ProducesResponseType(200, Type = typeof(int))]
+
+        public async Task<IActionResult> CountEvents(int orderId, DateTime? Filter = null)
+        {
+            int quantity;
+            if(Filter != null)
+            {
+                quantity = _context.TrackingEvents.Where(e => e.OrderId == orderId && e.CreatedAt <= Filter).Count();
+
+            }
+            else
+            {
+                 quantity = _context.TrackingEvents.Where(e => e.OrderId == orderId).Count();
+            }
+
+            return Ok(quantity);
         }
 
         [HttpGet]
