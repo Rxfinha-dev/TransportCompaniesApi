@@ -1,41 +1,64 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button, Input } from '@/shared/ui';
 import { useCreateOrder } from '../model/useCreateOrder';
-import { CreateOrderDto } from '@/entities/order/types';
+import { useUpdateOrder } from '../model/useUpdateOrder';
+import { CreateOrderDto, Order } from '@/entities/order/types';
 import './CreateOrderForm.css';
 
 interface CreateOrderFormProps {
   onSuccess?: () => void;
   onCancel?: () => void;
+  order?: Order;
 }
 
 export const CreateOrderForm: React.FC<CreateOrderFormProps> = ({
   onSuccess,
   onCancel,
+  order,
 }) => {
-  const { createOrder, isLoading } = useCreateOrder();
+  const isEditing = !!order;
+  const { createOrder, isLoading: isCreating } = useCreateOrder();
+  const { updateOrder, isLoading: isUpdating } = useUpdateOrder();
   const [formData, setFormData] = useState<Partial<CreateOrderDto>>({
     statusId: 0,
     costumerId: 0,
     transportCompanyId: 0,
     orderedItens: [],
-    origin: { cep: '', number: 0 },
-    destination: { cep: '', number: 0 },
+    origin: { street: '', number: '', city: '', state: '', zipCode: '' },
+    destination: { street: '', number: '', city: '', state: '', zipCode: '' },
   });
+
+  useEffect(() => {
+    if (order) {
+      setFormData({
+        statusId: order.statusId,
+        costumerId: order.costumerId,
+        transportCompanyId: order.transportCompanyId,
+        orderedItens: order.orderedItens,
+        origin: order.origin,
+        destination: order.destination,
+        isDispatched: order.isDispatched,
+      });
+    }
+  }, [order]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      await createOrder(formData as CreateOrderDto);
+      if (isEditing && order) {
+        await updateOrder({ id: order.id, data: formData as CreateOrderDto });
+      } else {
+        await createOrder(formData as CreateOrderDto);
+      }
       onSuccess?.();
     } catch (error) {
-      console.error('Erro ao criar pedido:', error);
+      console.error(`Erro ao ${isEditing ? 'atualizar' : 'criar'} pedido:`, error);
     }
   };
 
   return (
     <form onSubmit={handleSubmit} className="create-order-form">
-      <h2>Criar Novo Pedido</h2>
+      <h2>{isEditing ? 'Editar Pedido' : 'Criar Novo Pedido'}</h2>
 
       <div className="form-row">
         <Input
@@ -71,8 +94,8 @@ export const CreateOrderForm: React.FC<CreateOrderFormProps> = ({
       </div>
 
       <div className="form-actions">
-        <Button type="submit" isLoading={isLoading}>
-          Criar Pedido
+        <Button type="submit" isLoading={isCreating || isUpdating}>
+          {isEditing ? 'Atualizar Pedido' : 'Criar Pedido'}
         </Button>
         {onCancel && (
           <Button type="button" variant="outline" onClick={onCancel}>

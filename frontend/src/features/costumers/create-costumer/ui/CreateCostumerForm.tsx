@@ -1,25 +1,39 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button, Input } from '@/shared/ui';
 import { useCreateCostumer } from '../model/useCreateCostumer';
-import { CreateCostumerDto } from '@/entities/costumer/types';
-import { formatCpf, validateCpf } from '@/shared/lib/utils';
+import { useUpdateCostumer } from '../model/useUpdateCostumer';
+import { CreateCostumerDto, Costumer } from '@/entities/costumer/types';
+import { validateCpf } from '@/shared/lib/utils';
 import './CreateCostumerForm.css';
 
 interface CreateCostumerFormProps {
   onSuccess?: () => void;
   onCancel?: () => void;
+  costumer?: Costumer;
 }
 
 export const CreateCostumerForm: React.FC<CreateCostumerFormProps> = ({
   onSuccess,
   onCancel,
+  costumer,
 }) => {
-  const { createCostumer, isLoading } = useCreateCostumer();
+  const isEditing = !!costumer;
+  const { createCostumer, isLoading: isCreating } = useCreateCostumer();
+  const { updateCostumer, isLoading: isUpdating } = useUpdateCostumer();
   const [formData, setFormData] = useState<CreateCostumerDto>({
     name: '',
     cpf: '',
   });
   const [error, setError] = useState<string>('');
+
+  useEffect(() => {
+    if (costumer) {
+      setFormData({
+        name: costumer.name,
+        cpf: costumer.cpf,
+      });
+    }
+  }, [costumer]);
 
   const handleCpfChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value.replace(/\D/g, '');
@@ -39,16 +53,20 @@ export const CreateCostumerForm: React.FC<CreateCostumerFormProps> = ({
     }
 
     try {
-      await createCostumer(formData);
+      if (isEditing && costumer) {
+        await updateCostumer({ id: costumer.id, data: { ...formData, id: costumer.id } });
+      } else {
+        await createCostumer(formData);
+      }
       onSuccess?.();
     } catch (err: any) {
-      setError(err.message || 'Erro ao criar cliente');
+      setError(err.message || `Erro ao ${isEditing ? 'atualizar' : 'criar'} cliente`);
     }
   };
 
   return (
     <form onSubmit={handleSubmit} className="create-costumer-form">
-      <h2>Criar Novo Cliente</h2>
+      <h2>{isEditing ? 'Editar Cliente' : 'Criar Novo Cliente'}</h2>
 
       <Input
         label="Nome"
@@ -70,8 +88,8 @@ export const CreateCostumerForm: React.FC<CreateCostumerFormProps> = ({
       />
 
       <div className="form-actions">
-        <Button type="submit" isLoading={isLoading}>
-          Criar Cliente
+        <Button type="submit" isLoading={isCreating || isUpdating}>
+          {isEditing ? 'Atualizar Cliente' : 'Criar Cliente'}
         </Button>
         {onCancel && (
           <Button type="button" variant="outline" onClick={onCancel}>

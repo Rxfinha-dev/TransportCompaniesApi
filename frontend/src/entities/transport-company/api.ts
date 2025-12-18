@@ -7,30 +7,30 @@ import {
 
 export const transportCompanyApi = {
   getAll: async (): Promise<TransportCompany[]> => {
-    const response = await apiClient.get<TransportCompany[]>('/transportcompany');
+    const response = await apiClient.get<TransportCompany[]>('/TransportCompany');
     return response.data;
   },
 
   getById: async (id: number): Promise<TransportCompany> => {
     const response = await apiClient.get<TransportCompany>(
-      `/transportcompany/${id}`
+      `/TransportCompany/${id}`
     );
     return response.data;
   },
 
   create: async (data: CreateTransportCompanyDto): Promise<void> => {
-    await apiClient.post('/transportcompany', data);
+    await apiClient.post('/TransportCompany', data);
   },
 
   update: async (
     id: number,
     data: UpdateTransportCompanyDto
   ): Promise<void> => {
-    await apiClient.put(`/transportcompany/${id}`, { ...data, id });
+    await apiClient.put(`/TransportCompany/${id}`, { ...data, id });
   },
 
   delete: async (id: number): Promise<void> => {
-    await apiClient.delete(`/transportcompany/${id}`);
+    await apiClient.delete(`/TransportCompany/${id}`);
   },
 };
 

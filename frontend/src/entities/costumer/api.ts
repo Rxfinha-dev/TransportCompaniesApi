@@ -17,7 +17,7 @@ export const costumerApi = {
   },
 
   update: async (id: number, data: UpdateCostumerDto): Promise<void> => {
-    await apiClient.put(`/Costumer/${id}`, { ...data, id });
+    await apiClient.put(`/Costumer/${id}`, data);
   },
 
   delete: async (id: number): Promise<void> => {

@@ -3,25 +3,25 @@ import { Status, CreateStatusDto, UpdateStatusDto } from './types';
 
 export const statusApi = {
   getAll: async (): Promise<Status[]> => {
-    const response = await apiClient.get<Status[]>('/status');
+    const response = await apiClient.get<Status[]>('/Status');
     return response.data;
   },
 
   getById: async (id: number): Promise<Status> => {
-    const response = await apiClient.get<Status>(`/status/${id}`);
+    const response = await apiClient.get<Status>(`/Status/${id}`);
     return response.data;
   },
 
   create: async (data: CreateStatusDto): Promise<void> => {
-    await apiClient.post('/status', data);
+    await apiClient.post('/Status', data);
   },
 
   update: async (id: number, data: UpdateStatusDto): Promise<void> => {
-    await apiClient.put(`/status/${id}`, { ...data, id });
+    await apiClient.put(`/Status/${id}`, { ...data, id });
   },
 
   delete: async (id: number): Promise<void> => {
-    await apiClient.delete(`/status/${id}`);
+    await apiClient.delete(`/Status/${id}`);
   },
 };
 
