@@ -1,0 +1,97 @@
+.tracking-history {
+  padding: 1.5rem;
+  background: white;
+  border-radius: 0.5rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.tracking-history h3 {
+  margin: 0 0 1.5rem 0;
+  font-size: 1.25rem;
+  color: #111827;
+}
+
+.tracking-timeline {
+  position: relative;
+  padding-left: 2rem;
+}
+
+.tracking-timeline::before {
+  content: '';
+  position: absolute;
+  left: 0.5rem;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: #e5e7eb;
+}
+
+.tracking-event {
+  position: relative;
+  margin-bottom: 1.5rem;
+  display: flex;
+  gap: 1rem;
+}
+
+.tracking-event-dot {
+  position: absolute;
+  left: -1.75rem;
+  top: 0.25rem;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #3b82f6;
+  border: 2px solid white;
+  box-shadow: 0 0 0 2px #3b82f6;
+}
+
+.tracking-event-content {
+  flex: 1;
+  padding: 1rem;
+  background: #f9fafb;
+  border-radius: 0.375rem;
+}
+
+.tracking-event-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.tracking-event-date {
+  font-size: 0.875rem;
+  color: #6b7280;
+  font-weight: 500;
+}
+
+.tracking-event-location {
+  font-size: 0.875rem;
+  color: #3b82f6;
+}
+
+.tracking-event-message {
+  margin: 0.5rem 0;
+  color: #111827;
+  font-size: 0.9375rem;
+}
+
+.tracking-event-status {
+  font-size: 0.75rem;
+  color: #6b7280;
+}
+
+.error-message {
+  padding: 1rem;
+  background-color: #fee2e2;
+  color: #991b1b;
+  border-radius: 0.375rem;
+  text-align: center;
+}
+
+.empty-state {
+  padding: 2rem;
+  text-align: center;
+  color: #6b7280;
+}
+

@@ -1,0 +1,45 @@
+.costumers-page {
+  min-height: calc(100vh - 80px);
+  background-color: #f3f4f6;
+  padding: 2rem;
+}
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.page-header h1 {
+  margin: 0;
+  font-size: 2rem;
+  color: #111827;
+}
+
+.page-content {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.table-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.error-message {
+  padding: 1rem;
+  background-color: #fee2e2;
+  color: #991b1b;
+  border-radius: 0.375rem;
+  text-align: center;
+}
+
+.empty-state {
+  padding: 2rem;
+  text-align: center;
+  color: #6b7280;
+  background: white;
+  border-radius: 0.375rem;
+}
+

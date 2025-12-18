@@ -1,0 +1,21 @@
+.orders-page {
+  min-height: calc(100vh - 80px);
+  background-color: #f3f4f6;
+  padding: 2rem;
+}
+
+.page-header {
+  margin-bottom: 2rem;
+}
+
+.page-header h1 {
+  margin: 0;
+  font-size: 2rem;
+  color: #111827;
+}
+
+.page-content {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+

@@ -17,7 +17,7 @@ namespace TransportCompanies.Repository
 
         public async Task<bool> CreateOrder(Order order)
         {
-            _context.AddAsync(order);
+            await _context.AddAsync(order);
             return await Save();
               
         }
