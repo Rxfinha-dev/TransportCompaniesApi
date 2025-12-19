@@ -2,7 +2,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { orderApi } from '@/entities/order/api';
 import { CreateOrderDto } from '@/entities/order/types';
 
-export function useCreateOrder() {
+export const useCreateOrder = () => {
   const queryClient = useQueryClient();
 
   const mutation = useMutation({
@@ -15,5 +15,7 @@ export function useCreateOrder() {
   return {
     createOrder: mutation.mutateAsync,
     isLoading: mutation.isPending,
+    error: mutation.error,
   };
-}
+};
+

@@ -1,20 +1,25 @@
 import React, {useState} from "react";
-import {useQuery} from "@tanstack/react-query";
+import {useQuery, useMutation, useQueryClient} from "@tanstack/react-query";
 import {transportCompanyApi} from "@/entities/transport-company/api";
 import {CreateTransportCompanyForm} from "@/features/transportCompanies/create-transport-company";
 import {Table, TableHeader, TableBody, TableRow, TableCell, Loading, Button} from "@/shared/ui";
+import { TransportCompany } from "@/entities/transport-company/types";
 import "./TransportCompaniesPage.css";
-
-interface TransportCompany {
-    id: string | number;
-    name: string;
-}
 
 export const TransportCompaniesPage: React.FC = () => {
     const [showCreateForm, setShowCreateForm] = useState(false);
+    const [editingCompany, setEditingCompany] = useState<TransportCompany | null>(null);
+    const queryClient = useQueryClient();
     const {data: transportCompanies, isLoading, error} = useQuery({
         queryKey: ['transportCompanies'],
         queryFn: transportCompanyApi.getAll,
+    });
+
+    const deleteMutation = useMutation({
+        mutationFn: (id: number) => transportCompanyApi.delete(id),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['transportCompanies'] });
+        },
     });
 
     if(isLoading) {
@@ -43,10 +48,11 @@ export const TransportCompaniesPage: React.FC = () => {
             </div>
 
             <div className="page-content">
-                {showCreateForm ? (
+                {showCreateForm || editingCompany ? (
                     <CreateTransportCompanyForm
-                        onSuccess={() => setShowCreateForm(false)}
-                        onCancel={() => setShowCreateForm(false)}
+                        transportCompany={editingCompany || undefined}
+                        onSuccess={() => { setShowCreateForm(false); setEditingCompany(null); }}
+                        onCancel={() => { setShowCreateForm(false); setEditingCompany(null); }}
                     />
                 ) : (
                     <>
@@ -66,8 +72,16 @@ export const TransportCompaniesPage: React.FC = () => {
                                             <TableCell>{company.name}</TableCell>
                                             <TableCell>
                                                 <div className="table-actions">
-                                                    <Button size="small" variant="outline">Editar</Button>
-                                                    <Button size="small" variant="outline" color="danger">Excluir</Button>
+                                                    <Button size="small" variant="outline" onClick={() => setEditingCompany(company)}>
+                                                        Editar
+                                                    </Button>
+                                                    <Button size="small" variant="danger" onClick={() => {
+                                                        if (window.confirm('Tem certeza que deseja excluir esta transportadora?')) {
+                                                            deleteMutation.mutate(company.id);
+                                                        }
+                                                    }}>
+                                                        Excluir
+                                                    </Button>
                                                 </div>
                                             </TableCell>
                                         </TableRow>

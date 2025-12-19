@@ -1,6 +1,6 @@
 export interface Address {
   cep: string;
-  number: string;//pode ser string pois é apenas o número da casa, e pode incluir letras
+  number: number;
   rua?: string;
   bairro?: string;
   cidade?: string;

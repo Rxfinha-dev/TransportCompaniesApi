@@ -2,25 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { Button, Input } from '@/shared/ui';
 import { useCreateOrder } from '../model/useCreateOrder';
 import { useUpdateOrder } from '../model/useUpdateOrder';
+import { CreateOrderDto, Order } from '@/entities/order/types';
 import './CreateOrderForm.css';
-import { CreateOrderDto } from '@/entities/order/types';
 
 interface CreateOrderFormProps {
   onSuccess?: () => void;
   onCancel?: () => void;
-  order?: CreateOrderDto;
+  order?: Order;
 }
-
-const emptyAddress = {
-  cep: '',
-  number: '',
-  bairro: '',
-  cidade: '',
-  estado: '',
-  rua: '',
-
-
-};
 
 export const CreateOrderForm: React.FC<CreateOrderFormProps> = ({
   onSuccess,
@@ -31,13 +20,12 @@ export const CreateOrderForm: React.FC<CreateOrderFormProps> = ({
   const { createOrder, isLoading: isCreating } = useCreateOrder();
   const { updateOrder, isLoading: isUpdating } = useUpdateOrder();
   const [formData, setFormData] = useState<Partial<CreateOrderDto>>({
-    statusId: undefined,
-    costumerId: undefined,
-    transportCompanyId: undefined,
+    statusId: 0,
+    costumerId: 0,
+    transportCompanyId: 0,
     orderedItens: [],
-    origin: emptyAddress,
-    destination: emptyAddress,
-    
+    origin: { street: '', number: '', city: '', state: '', zipCode: '' },
+    destination: { street: '', number: '', city: '', state: '', zipCode: '' },
   });
 
   useEffect(() => {
@@ -49,6 +37,7 @@ export const CreateOrderForm: React.FC<CreateOrderFormProps> = ({
         orderedItens: order.orderedItens,
         origin: order.origin,
         destination: order.destination,
+        isDispatched: order.isDispatched,
       });
     }
   }, [order]);
@@ -102,18 +91,6 @@ export const CreateOrderForm: React.FC<CreateOrderFormProps> = ({
           }
           required
         />
-        <Input
-        label='cep origem'
-        type='number'
-        value={formData.origin?.cep || ''}
-        onChange={(e) =>
-          setFormData({
-            ...formData,
-            origin: { ...formData.origin!, cep: e.target.value }
-          })
-        }
-        required
-      />
       </div>
 
       <div className="form-actions">
@@ -125,7 +102,7 @@ export const CreateOrderForm: React.FC<CreateOrderFormProps> = ({
             Cancelar
           </Button>
         )}
-      </div>  
+      </div>
     </form>
   );
 };
