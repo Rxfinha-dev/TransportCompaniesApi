@@ -30,6 +30,9 @@ export const OrdersPage: React.FC = () => {
   const handleCreate = () => {
     setShowCreateForm(true);
   };
+  const handleEdit = () => {
+    setEditingOrder(selectedOrder);
+  }
 
   return (
     <div className="orders-page">

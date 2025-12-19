@@ -11,6 +11,12 @@ interface CreateOrderFormProps {
   order?: Order;
 }
 
+const addressIntialState = {
+  cep: '',
+  number: '',
+};
+
+
 export const CreateOrderForm: React.FC<CreateOrderFormProps> = ({
   onSuccess,
   onCancel,
@@ -20,17 +26,19 @@ export const CreateOrderForm: React.FC<CreateOrderFormProps> = ({
   const { createOrder, isLoading: isCreating } = useCreateOrder();
   const { updateOrder, isLoading: isUpdating } = useUpdateOrder();
   const [formData, setFormData] = useState<Partial<CreateOrderDto>>({
-    statusId: 0,
-    costumerId: 0,
-    transportCompanyId: 0,
+    id: undefined,
+    statusId: undefined,
+    costumerId: undefined,
+    transportCompanyId: undefined,
     orderedItens: [],
-    origin: { street: '', number: '', city: '', state: '', zipCode: '' },
-    destination: { street: '', number: '', city: '', state: '', zipCode: '' },
+    origin: addressIntialState,
+    destination: addressIntialState,
   });
 
   useEffect(() => {
     if (order) {
       setFormData({
+        id: order.id,
         statusId: order.statusId,
         costumerId: order.costumerId,
         transportCompanyId: order.transportCompanyId,
@@ -91,7 +99,55 @@ export const CreateOrderForm: React.FC<CreateOrderFormProps> = ({
           }
           required
         />
-      </div>
+        <Input
+          label="CEP de Origem"
+          type="text"
+          value={formData.origin?.cep}
+          onChange={(e) =>
+            setFormData({
+              ...formData,
+              origin: { ...formData.origin, cep: e.target.value },
+            })
+          }
+          required
+        />
+        <Input
+          label='Número de Origem'
+          type="text"
+          value={formData.origin?.number}
+          onChange={(e) =>
+            setFormData({
+              ...formData,
+              origin: { ...formData.origin, number: e.target.value },
+            })
+          }
+          required
+        />  
+        <Input
+          label='CEP de destino'
+          type="text"
+          value={formData.destination?.cep || ''}
+          onChange={(e) =>
+            setFormData({
+              ...formData,
+              destination: { ...formData.destination, cep: e.target.value },
+            })
+          }
+          required
+        />
+        <Input
+          label='Número de destino'
+          type="text"
+          value={formData.destination?.number || ''}
+          onChange={(e) =>
+            setFormData({
+              ...formData,
+              destination: { ...formData.destination, number: e.target.value },
+            })
+          }
+          required
+        />
+      </div>  
 
       <div className="form-actions">
         <Button type="submit" isLoading={isCreating || isUpdating}>

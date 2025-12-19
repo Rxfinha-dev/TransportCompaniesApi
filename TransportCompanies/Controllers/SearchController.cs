@@ -37,7 +37,7 @@ namespace TransportCompanies.Controllers
                 .ToListAsync();
 
             searchResult.Customers = await _context.Costumers
-                .Where(c => c.Name.ToLower().Contains(filter!))
+                .Where(c => c.Name.ToLower().Contains(filter!)) 
                 .Select(c => new SearchItemDto
                 {
                     Id = c.Id,

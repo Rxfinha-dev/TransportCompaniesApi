@@ -22,12 +22,14 @@ export interface OrderWithRelations extends Order {
 }
 
 export interface CreateOrderDto {
+  id: number;
   orderedItens: Item[];
   statusId: number;
   costumerId: number;
   transportCompanyId: number;
   origin: Address;
   destination: Address;
+  isDispatched?: boolean;
 }
 
 export interface UpdateOrderDto extends Partial<CreateOrderDto> {
