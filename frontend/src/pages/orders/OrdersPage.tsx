@@ -86,7 +86,7 @@ export const OrdersPage: React.FC = () => {
             onCancel={() => { setShowCreateForm(false); setEditingOrder(null); }}
           />
         ) : (
-          <OrdersList onViewTracking={handleViewTracking} onEdit={handleEdit} onCreate={handleCreate} />
+          <OrdersList onViewTracking={handleViewTracking}  onCreate={handleCreate} />
         )}
       </div>
     </div>

@@ -7,7 +7,7 @@ export const Header: React.FC = () => {
     <header className="header">
       <div className="header-container">
         <Link to="/" className="header-logo">
-          <h1>Transport Companies</h1>
+          <h1>Gerenciamento de Transportadoras</h1>
         </Link>
         <nav className="header-nav">
           <Link to="/orders" className="nav-link">
@@ -18,9 +18,6 @@ export const Header: React.FC = () => {
           </Link>
           <Link to="/transport-companies" className="nav-link">
             Transportadoras
-          </Link>
-          <Link to="/status" className="nav-link">
-            Status
           </Link>
         </nav>
       </div>
