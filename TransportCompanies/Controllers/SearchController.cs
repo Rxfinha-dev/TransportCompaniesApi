@@ -17,7 +17,7 @@ namespace TransportCompanies.Controllers
             _context = context;
         }
         [HttpGet]
-        [ProducesResponseType<SearchResult>(StatusCodes.Status200OK)]
+        [ProducesResponseType<SearchDto>(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Search([FromQuery] string? filter = null)                                          
         {
@@ -52,7 +52,7 @@ namespace TransportCompanies.Controllers
                     Id = tc.Id,
                     Name = tc.Name
                 })
-                .ToListAsync();
+                .ToListAsync(); 
 
             return Ok(searchResult);
 
