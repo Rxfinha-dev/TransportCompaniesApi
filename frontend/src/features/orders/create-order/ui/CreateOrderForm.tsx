@@ -11,11 +11,10 @@ interface CreateOrderFormProps {
   order?: Order;
 }
 
-const addressIntialState = {
+const addressInitialState = {
   cep: '',
   number: '',
 };
-
 
 export const CreateOrderForm: React.FC<CreateOrderFormProps> = ({
   onSuccess,
@@ -31,8 +30,8 @@ export const CreateOrderForm: React.FC<CreateOrderFormProps> = ({
     costumerId: undefined,
     transportCompanyId: undefined,
     orderedItens: [],
-    origin: addressIntialState,
-    destination: addressIntialState,
+    origin: addressInitialState,
+    destination: addressInitialState,
   });
 
   useEffect(() => {
@@ -43,8 +42,8 @@ export const CreateOrderForm: React.FC<CreateOrderFormProps> = ({
         costumerId: order.costumerId,
         transportCompanyId: order.transportCompanyId,
         orderedItens: order.orderedItens,
-        origin: order.origin,
-        destination: order.destination,
+        origin: order.origin || addressInitialState,
+        destination: order.destination || addressInitialState,
         isDispatched: order.isDispatched,
       });
     }
@@ -52,15 +51,46 @@ export const CreateOrderForm: React.FC<CreateOrderFormProps> = ({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // Validações
+    if (!formData.costumerId || !formData.transportCompanyId || !formData.statusId) {
+      alert('Por favor, preencha todos os campos obrigatórios');
+      return;
+    }
+
     try {
       if (isEditing && order) {
-        await updateOrder({ id: order.id, data: formData as CreateOrderDto });
+        // CORREÇÃO: Passar os dados corretamente para o update
+        await updateOrder({ 
+          id: order.id, 
+          data: {
+            id: order.id,
+            statusId: formData.statusId!,
+            costumerId: formData.costumerId!,
+            transportCompanyId: formData.transportCompanyId!,
+            orderedItens: formData.orderedItens || [],
+            origin: formData.origin || addressInitialState,
+            destination: formData.destination || addressInitialState,
+            isDispatched: formData.isDispatched,
+          } 
+        });
       } else {
-        await createOrder(formData as CreateOrderDto);
+        // Para criar, precisamos de um ID (isso pode ser gerado pelo backend)
+        await createOrder({
+          id: 0, // O backend deve gerar o ID
+          statusId: formData.statusId!,
+          costumerId: formData.costumerId!,
+          transportCompanyId: formData.transportCompanyId!,
+          orderedItens: formData.orderedItens || [],
+          origin: formData.origin || addressInitialState,
+          destination: formData.destination || addressInitialState,
+          isDispatched: formData.isDispatched || false,
+        });
       }
       onSuccess?.();
-    } catch (error) {
+    } catch (error: any) {
       console.error(`Erro ao ${isEditing ? 'atualizar' : 'criar'} pedido:`, error);
+      alert(`Erro ao ${isEditing ? 'atualizar' : 'criar'} pedido: ${error.message || 'Erro desconhecido'}`);
     }
   };
 
@@ -99,10 +129,14 @@ export const CreateOrderForm: React.FC<CreateOrderFormProps> = ({
           }
           required
         />
+      </div>
+
+      <h3>Endereço de Origem</h3>
+      <div className="form-row">
         <Input
           label="CEP de Origem"
           type="text"
-          value={formData.origin?.cep}
+          value={formData.origin?.cep || ''}
           onChange={(e) =>
             setFormData({
               ...formData,
@@ -114,7 +148,7 @@ export const CreateOrderForm: React.FC<CreateOrderFormProps> = ({
         <Input
           label='Número de Origem'
           type="text"
-          value={formData.origin?.number}
+          value={formData.origin?.number || ''}
           onChange={(e) =>
             setFormData({
               ...formData,
@@ -123,8 +157,12 @@ export const CreateOrderForm: React.FC<CreateOrderFormProps> = ({
           }
           required
         />  
+      </div>
+
+      <h3>Endereço de Destino</h3>
+      <div className="form-row">
         <Input
-          label='CEP de destino'
+          label='CEP de Destino'
           type="text"
           value={formData.destination?.cep || ''}
           onChange={(e) =>
@@ -136,7 +174,7 @@ export const CreateOrderForm: React.FC<CreateOrderFormProps> = ({
           required
         />
         <Input
-          label='Número de destino'
+          label='Número de Destino'
           type="text"
           value={formData.destination?.number || ''}
           onChange={(e) =>
@@ -147,7 +185,7 @@ export const CreateOrderForm: React.FC<CreateOrderFormProps> = ({
           }
           required
         />
-      </div>  
+      </div>
 
       <div className="form-actions">
         <Button type="submit" isLoading={isCreating || isUpdating}>
@@ -162,4 +200,3 @@ export const CreateOrderForm: React.FC<CreateOrderFormProps> = ({
     </form>
   );
 };
-

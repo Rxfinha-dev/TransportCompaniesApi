@@ -30,9 +30,10 @@ export const OrdersPage: React.FC = () => {
   const handleCreate = () => {
     setShowCreateForm(true);
   };
-  const handleEdit = () => {
-    setEditingOrder(selectedOrder);
-  }
+  const handleEdit = (order: Order) => {
+    setEditingOrder(order);
+    setShowTracking(false); // Fecha a visualização de tracking se estiver aberta
+  };
 
   return (
     <div className="orders-page">
