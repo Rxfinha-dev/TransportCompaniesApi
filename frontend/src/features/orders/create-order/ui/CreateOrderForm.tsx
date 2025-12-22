@@ -60,7 +60,7 @@ export const CreateOrderForm: React.FC<CreateOrderFormProps> = ({
 
     try {
       if (isEditing && order) {
-        // CORREÇÃO: Passar os dados corretamente para o update
+     
         await updateOrder({ 
           id: order.id, 
           data: {
@@ -75,9 +75,9 @@ export const CreateOrderForm: React.FC<CreateOrderFormProps> = ({
           } 
         });
       } else {
-        // Para criar, precisamos de um ID (isso pode ser gerado pelo backend)
+       
         await createOrder({
-          id: 0, // O backend deve gerar o ID
+          id: 0, 
           statusId: formData.statusId!,
           costumerId: formData.costumerId!,
           transportCompanyId: formData.transportCompanyId!,
